@@ -110,7 +110,7 @@ body {
 .member-role { font-size: 12px; color: rgba(245,237,214,0.5); margin-top: 2px; }
 .member-tag { font-size: 11px; font-weight: 600; color: var(--amber); margin-left: auto; }
 </style>
-</head>
+<link rel="manifest" href="/manifest.json"><meta name="theme-color" content="#C4441C"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"></head>
 <body>
 
 <div class="header">
@@ -381,5 +381,5 @@ renderDays();renderExcursions();renderChecklist();renderCosti();renderGruppo();
 
 <!-- Sostituisci YOUR_API_KEY con la tua Google Maps API Key -->
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=Function.prototype"></script>
-</body>
+<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("/sw.js");}</script></body>
 </html>
