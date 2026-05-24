@@ -109,19 +109,8 @@ body {
 .member-name { font-size: 15px; font-weight: 600; color: var(--cream); }
 .member-role { font-size: 12px; color: rgba(245,237,214,0.5); margin-top: 2px; }
 .member-tag { font-size: 11px; font-weight: 600; color: var(--amber); margin-left: auto; }
-/* METEO */
-.weather-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-bottom:20px;}
-.weather-card{background:rgba(245,237,214,0.04);border:1px solid rgba(196,68,28,0.25);border-radius:10px;padding:16px;text-align:center;}
-.weather-card.today{border-color:var(--amber);background:rgba(232,160,32,0.08);}
-.weather-city{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--amber);margin-bottom:6px;}
-.weather-icon{font-size:36px;margin:8px 0;}
-.weather-temp{font-family:"Bebas Neue",sans-serif;font-size:36px;color:var(--cream);line-height:1;}
-.weather-desc{font-size:11px;color:rgba(245,237,214,0.6);margin-top:4px;text-transform:capitalize;}
-.weather-details{display:flex;justify-content:center;gap:12px;margin-top:10px;font-size:11px;color:rgba(245,237,214,0.5);}
-.weather-loading{text-align:center;padding:40px;color:rgba(245,237,214,0.4);font-size:14px;}
-.today-label{display:inline-block;background:var(--amber);color:var(--dark);font-size:9px;font-weight:700;letter-spacing:1px;padding:2px 6px;border-radius:3px;margin-bottom:6px;}
 </style>
-<link rel="manifest" href="/manifest.json"><meta name="theme-color" content="#C4441C"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"></head>
+</head>
 <body>
 
 <div class="header">
@@ -137,7 +126,10 @@ body {
   <div class="nav-inner">
     <button class="nav-btn active" onclick="showSection('itinerario',this)">Itinerario</button>
     <button class="nav-btn" onclick="showSection('mappa',this)">Mappa</button>
-    <button class="nav-btn" onclick="showSection('meteo',this)">Meteo</button><button class="nav-btn" onclick="showSection('escursioni',this)">Escursioni</button>
+    <button class="nav-btn" onclick="showSection('meteo',this)">Meteo</button>
+    <button class="nav-btn" onclick="showSection('valuta',this)">Valuta</button>
+    <button class="nav-btn" onclick="showSection('orario',this)">Orario</button>
+    <button class="nav-btn" onclick="showSection('escursioni',this)">Escursioni</button>
     <button class="nav-btn" onclick="showSection('checklist',this)">Checklist</button>
     <button class="nav-btn" onclick="showSection('costi',this)">Costi</button>
     <button class="nav-btn" onclick="showSection('gruppo',this)">Gruppo</button>
@@ -157,7 +149,61 @@ body {
     </div>
   </div>
 
-  <div id="meteo" class="section"><div class="section-title">Meteo</div><div id="weather-container"><div class="weather-loading">⛅ Caricamento meteo in corso...</div></div></div><div id="escursioni" class="section"><div class="section-title">Escursioni</div><div id="exc-container"></div></div>
+  <div id="meteo" class="section">
+    <div class="section-title">Meteo</div>
+    <div id="weather-container"><div style="text-align:center;padding:40px;color:rgba(245,237,214,0.4);">⛅ Caricamento meteo...</div></div>
+  </div>
+
+  <div id="valuta" class="section">
+    <div class="section-title">Convertitore Valuta</div>
+    <div style="background:rgba(245,237,214,0.04);border:1px solid rgba(196,68,28,0.25);border-radius:10px;padding:24px;margin-bottom:16px;">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap;">
+        <div style="flex:1;min-width:120px;">
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--amber);margin-bottom:8px;">Euro €</div>
+          <input id="eur-input" type="number" value="100" oninput="convertFromEur()" style="width:100%;background:rgba(245,237,214,0.08);border:1px solid rgba(196,68,28,0.4);border-radius:6px;padding:12px;color:var(--cream);font-family:Montserrat,sans-serif;font-size:24px;outline:none;">
+        </div>
+        <div style="font-size:28px;color:var(--rust);padding-top:20px;">⇄</div>
+        <div style="flex:1;min-width:120px;">
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--amber);margin-bottom:8px;">Dollaro $</div>
+          <input id="usd-input" type="number" oninput="convertFromUsd()" style="width:100%;background:rgba(245,237,214,0.08);border:1px solid rgba(196,68,28,0.4);border-radius:6px;padding:12px;color:var(--cream);font-family:Montserrat,sans-serif;font-size:24px;outline:none;">
+        </div>
+      </div>
+      <div id="rate-info" style="font-size:12px;color:rgba(245,237,214,0.4);text-align:center;">Caricamento tasso di cambio...</div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;">
+      <div onclick="quickConvert(5)" style="background:rgba(245,237,214,0.04);border:1px solid rgba(196,68,28,0.2);border-radius:8px;padding:14px;text-align:center;cursor:pointer;"><div style="font-family:Bebas Neue,sans-serif;font-size:22px;color:var(--rust);">$5</div><div id="q5" style="font-size:12px;color:rgba(245,237,214,0.6);">€ —</div></div>
+      <div onclick="quickConvert(10)" style="background:rgba(245,237,214,0.04);border:1px solid rgba(196,68,28,0.2);border-radius:8px;padding:14px;text-align:center;cursor:pointer;"><div style="font-family:Bebas Neue,sans-serif;font-size:22px;color:var(--rust);">$10</div><div id="q10" style="font-size:12px;color:rgba(245,237,214,0.6);">€ —</div></div>
+      <div onclick="quickConvert(20)" style="background:rgba(245,237,214,0.04);border:1px solid rgba(196,68,28,0.2);border-radius:8px;padding:14px;text-align:center;cursor:pointer;"><div style="font-family:Bebas Neue,sans-serif;font-size:22px;color:var(--rust);">$20</div><div id="q20" style="font-size:12px;color:rgba(245,237,214,0.6);">€ —</div></div>
+      <div onclick="quickConvert(50)" style="background:rgba(245,237,214,0.04);border:1px solid rgba(196,68,28,0.2);border-radius:8px;padding:14px;text-align:center;cursor:pointer;"><div style="font-family:Bebas Neue,sans-serif;font-size:22px;color:var(--rust);">$50</div><div id="q50" style="font-size:12px;color:rgba(245,237,214,0.6);">€ —</div></div>
+      <div onclick="quickConvert(100)" style="background:rgba(245,237,214,0.04);border:1px solid rgba(196,68,28,0.2);border-radius:8px;padding:14px;text-align:center;cursor:pointer;"><div style="font-family:Bebas Neue,sans-serif;font-size:22px;color:var(--rust);">$100</div><div id="q100" style="font-size:12px;color:rgba(245,237,214,0.6);">€ —</div></div>
+      <div onclick="quickConvert(200)" style="background:rgba(245,237,214,0.04);border:1px solid rgba(196,68,28,0.2);border-radius:8px;padding:14px;text-align:center;cursor:pointer;"><div style="font-family:Bebas Neue,sans-serif;font-size:22px;color:var(--rust);">$200</div><div id="q200" style="font-size:12px;color:rgba(245,237,214,0.6);">€ —</div></div>
+    </div>
+  </div>
+
+  <div id="orario" class="section">
+    <div class="section-title">Fuso Orario</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;">
+      <div style="background:rgba(245,237,214,0.04);border:1px solid rgba(196,68,28,0.25);border-radius:10px;padding:24px;text-align:center;">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--amber);margin-bottom:12px;">&#127470;&#127481; Italia</div>
+        <div id="italy-time" style="font-family:Bebas Neue,sans-serif;font-size:48px;color:var(--cream);line-height:1;">--:--</div>
+        <div id="italy-date" style="font-size:12px;color:rgba(245,237,214,0.5);margin-top:6px;">--</div>
+      </div>
+      <div style="background:rgba(245,237,214,0.04);border:1px solid rgba(196,68,28,0.25);border-radius:10px;padding:24px;text-align:center;">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--amber);margin-bottom:12px;">&#127482;&#127480; California</div>
+        <div id="usa-time" style="font-family:Bebas Neue,sans-serif;font-size:48px;color:var(--cream);line-height:1;">--:--</div>
+        <div id="usa-date" style="font-size:12px;color:rgba(245,237,214,0.5);margin-top:6px;">--</div>
+      </div>
+    </div>
+    <div style="background:rgba(245,237,214,0.04);border:1px solid rgba(245,237,214,0.08);border-radius:8px;padding:16px;font-size:13px;color:rgba(245,237,214,0.6);line-height:1.8;">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--amber);margin-bottom:10px;">Note sul fuso orario</div>
+      La California e' -9 ore rispetto all'Italia in estate (PDT)<br>
+      Se in Italia sono le 18:00, in California sono le 09:00<br>
+      Il volo di andata dura circa 11 ore totali (con scalo Londra)<br>
+      Quando arrivate a LAX sono le 14:55 locali, in Italia le 23:55
+    </div>
+  </div>
+
+  <div id="escursioni" class="section"><div class="section-title">Escursioni</div><div id="exc-container"></div></div>
   <div id="checklist" class="section"><div class="section-title">Da fare</div><div class="progress-label" id="progress-label">0 / 0 completati</div><div class="progress-bar-wrap"><div class="progress-bar-fill" id="progress-fill" style="width:0%"></div></div><div id="checklist-container"></div></div>
   <div id="costi" class="section"><div class="section-title">Costi</div><div id="costi-container"></div></div>
   <div id="gruppo" class="section"><div class="section-title">Il Gruppo</div><div id="gruppo-container"></div></div>
@@ -375,22 +421,108 @@ function renderGruppo(){
   `<div style="margin-top:24px;padding:16px;background:rgba(245,237,214,0.04);border:1px solid rgba(245,237,214,0.1);border-radius:8px;"><div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--amber);margin-bottom:12px;">🚗 Auto</div><div style="font-size:13px;color:rgba(245,237,214,0.7);line-height:1.9;"><span style="font-weight:600;color:var(--cream);">Volvo XC40</span> — Hertz Burbank · ritiro 17 agosto<br><span style="font-weight:600;color:var(--cream);">Toyota RAV4</span> — Avis Los Angeles · ritiro 17 agosto<br><span style="color:rgba(245,237,214,0.4);font-size:11px;">Entrambe restituite il 29 agosto</span></div></div>`;
 }
 
-let mapInitialized = false;
+const WEATHER_KEY="ad1954e444605530ba71418572e09d53";
+const weatherCities=[
+  {name:"Pismo Beach",lat:35.1383,lon:-120.6445,day:1},
+  {name:"San Francisco",lat:37.7749,lon:-122.4194,day:2},
+  {name:"Sequoia NP",lat:36.4864,lon:-118.5658,day:3},
+  {name:"Las Vegas",lat:36.1699,lon:-115.1398,day:5},
+  {name:"Bryce Canyon",lat:37.5930,lon:-112.1871,day:6},
+  {name:"Antelope Canyon",lat:36.8619,lon:-111.3743,day:7},
+  {name:"Grand Canyon",lat:36.0544,lon:-112.1401,day:7},
+  {name:"San Diego",lat:32.7157,lon:-117.1611,day:9},
+  {name:"Los Angeles",lat:34.0522,lon:-118.2437,day:10},
+];
+const weatherIcons={"01d":"☀️","01n":"🌙","02d":"⛅","02n":"⛅","03d":"☁️","03n":"☁️","04d":"☁️","04n":"☁️","09d":"🌧️","09n":"🌧️","10d":"🌦️","10n":"🌦️","11d":"⛈️","11n":"⛈️","13d":"❄️","13n":"❄️","50d":"🌫️","50n":"🌫️"};
+
+async function loadWeather(){
+  const c=document.getElementById("weather-container");
+  try{
+    const cards=await Promise.all(weatherCities.map(async city=>{
+      const url=`https://api.openweathermap.org/data/2.5/weather?lat=${city.lat}&lon=${city.lon}&appid=${WEATHER_KEY}&units=metric&lang=it`;
+      const res=await fetch(url);
+      const data=await res.json();
+      const icon=weatherIcons[data.weather[0].icon]||"🌡️";
+      return `<div style="background:rgba(245,237,214,0.04);border:1px solid rgba(196,68,28,0.25);border-radius:10px;padding:16px;text-align:center;">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--amber);margin-bottom:6px;">${city.name}</div>
+        <div style="font-size:36px;margin:8px 0;">${icon}</div>
+        <div style="font-family:Bebas Neue,sans-serif;font-size:36px;color:var(--cream);line-height:1;">${Math.round(data.main.temp)}°C</div>
+        <div style="font-size:11px;color:rgba(245,237,214,0.6);margin-top:4px;text-transform:capitalize;">${data.weather[0].description}</div>
+        <div style="display:flex;justify-content:center;gap:12px;margin-top:10px;font-size:11px;color:rgba(245,237,214,0.5);">
+          <span>💧 ${data.main.humidity}%</span><span>💨 ${Math.round(data.wind.speed)} m/s</span>
+        </div>
+        <div style="font-size:10px;color:rgba(245,237,214,0.3);margin-top:4px;">Giorno ${city.day}</div>
+      </div>`;
+    }));
+    c.innerHTML=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;">${cards.join("")}</div>`;
+  }catch(e){
+    c.innerHTML=`<div style="text-align:center;padding:40px;color:rgba(245,237,214,0.4);">⚠️ Meteo non disponibile — controlla la connessione</div>`;
+  }
+}
+
+let exchangeRate=1.08;
+async function loadExchangeRate(){
+  try{
+    const res=await fetch("https://api.exchangerate-api.com/v4/latest/USD");
+    const data=await res.json();
+    exchangeRate=data.rates.EUR;
+    document.getElementById("rate-info").textContent=`1 USD = ${exchangeRate.toFixed(4)} EUR · aggiornato ora`;
+    convertFromEur();
+    updateQuickBtns();
+  }catch(e){
+    document.getElementById("rate-info").textContent="Tasso di cambio non disponibile — usando 1 USD ≈ 0.92 EUR";
+    exchangeRate=0.92;
+    convertFromEur();
+    updateQuickBtns();
+  }
+}
+function convertFromEur(){
+  const eur=parseFloat(document.getElementById("eur-input").value)||0;
+  document.getElementById("usd-input").value=(eur/exchangeRate).toFixed(2);
+}
+function convertFromUsd(){
+  const usd=parseFloat(document.getElementById("usd-input").value)||0;
+  document.getElementById("eur-input").value=(usd*exchangeRate).toFixed(2);
+}
+function quickConvert(usd){
+  document.getElementById("usd-input").value=usd;
+  convertFromUsd();
+}
+function updateQuickBtns(){
+  [5,10,20,50,100,200].forEach(v=>{
+    const el=document.getElementById("q"+v);
+    if(el) el.textContent="€ "+(v*exchangeRate).toFixed(2);
+  });
+}
+
+function updateClocks(){
+  const now=new Date();
+  const italy=new Intl.DateTimeFormat("it-IT",{timeZone:"Europe/Rome",hour:"2-digit",minute:"2-digit",second:"2-digit"}).format(now);
+  const italyDate=new Intl.DateTimeFormat("it-IT",{timeZone:"Europe/Rome",weekday:"long",day:"numeric",month:"long"}).format(now);
+  const usa=new Intl.DateTimeFormat("it-IT",{timeZone:"America/Los_Angeles",hour:"2-digit",minute:"2-digit",second:"2-digit"}).format(now);
+  const usaDate=new Intl.DateTimeFormat("it-IT",{timeZone:"America/Los_Angeles",weekday:"long",day:"numeric",month:"long"}).format(now);
+  document.getElementById("italy-time").textContent=italy;
+  document.getElementById("italy-date").textContent=italyDate;
+  document.getElementById("usa-time").textContent=usa;
+  document.getElementById("usa-date").textContent=usaDate;
+}
+
+let mapInitialized=false,weatherLoaded=false,valutaLoaded=false,orarioInterval=null;
 function showSection(id,btn){
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   btn.classList.add('active');
-  if(id==="meteo"&&!weatherLoaded){weatherLoaded=true;loadWeather();}if(id==="mappa"&&!mapInitialized&&typeof google!=="undefined"){
-    mapInitialized=true;
-    initMap();
-  }
+  if(id==='mappa'&&!mapInitialized&&typeof google!=='undefined'){mapInitialized=true;initMap();}
+  if(id==='meteo'&&!weatherLoaded){weatherLoaded=true;loadWeather();}
+  if(id==='valuta'&&!valutaLoaded){valutaLoaded=true;loadExchangeRate();}
+  if(id==='orario'){updateClocks();if(!orarioInterval)orarioInterval=setInterval(updateClocks,1000);}
 }
 
 renderDays();renderExcursions();renderChecklist();renderCosti();renderGruppo();
 </script>
 
-<!-- Sostituisci YOUR_API_KEY con la tua Google Maps API Key -->
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=Function.prototype"></script>
-<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("/sw.js");}</script></body>
+<!-- Sostituisci AIzaSyB2dk6H08eCWsiKb7EdAo4zGQBidvN7how con la tua Google Maps API Key -->
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB2dk6H08eCWsiKb7EdAo4zGQBidvN7how&callback=Function.prototype"></script>
+</body>
 </html>
