@@ -17,12 +17,12 @@ body {
   font-family: 'Montserrat', sans-serif; min-height: 100vh;
   background-image: radial-gradient(ellipse at top, #2A1A08 0%, #1A1208 60%);
 }
-.header { background: var(--rust); position: relative; overflow: hidden; border-bottom: 4px solid var(--amber); padding-top: env(safe-area-inset-top); }
+.header { background: var(--rust); position: relative; overflow: hidden; border-bottom: 4px solid var(--amber); margin-top: -1px; }
 .header-inner { max-width: 900px; margin: 0 auto; padding: 20px 24px 16px; position: relative; z-index: 2; }
 .header-badge { font-family: 'Bebas Neue', sans-serif; font-size: 11px; letter-spacing: 4px; color: var(--amber); margin-bottom: 4px; }
 .header-title { font-family: 'Bebas Neue', sans-serif; font-size: 48px; letter-spacing: 3px; color: var(--cream); line-height: 1; }
 .header-sub { font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 500; color: rgba(245,237,214,0.75); margin-top: 8px; }
-.road-line { position: absolute; bottom: 0; left: 0; right: 0; height: 6px; background: repeating-linear-gradient(90deg, var(--amber) 0, var(--amber) 30px, transparent 30px, transparent 60px); opacity: 0.4; }
+body::before { content:""; position:fixed; top:0; left:0; right:0; height:env(safe-area-inset-top); background:var(--rust); z-index:9999; } .road-line { position: absolute; bottom: 0; left: 0; right: 0; height: 6px; background: repeating-linear-gradient(90deg, var(--amber) 0, var(--amber) 30px, transparent 30px, transparent 60px); opacity: 0.4; }
 .nav { background: #0F0B05; border-bottom: 1px solid rgba(196,68,28,0.3); position: sticky; top: 0; z-index: 100; }
 .nav-inner { max-width: 900px; margin: 0 auto; display: flex; overflow-x: auto; scrollbar-width: none; }
 .nav-inner::-webkit-scrollbar { display: none; }
@@ -117,7 +117,7 @@ body {
   <div class="header-inner">
     <div class="header-badge">★ SUMMER 2026 ★</div>
     <div class="header-title">USA ROAD TRIP</div>
-    <div class="header-sub">Los Angeles &nbsp;·&nbsp; California &nbsp;·&nbsp; Southwest</div>
+    <div class="header-sub">Los Angeles &nbsp;·&nbsp; California &nbsp;·&nbsp; Southwest</div><div class="header-sub" style="margin-top:2px;font-weight:600;">17–29 Agosto 2026</div><div class="header-sub" style="margin-top:2px;font-weight:600;">17–29 Agosto 2026</div>
   </div>
   <div class="road-line"></div>
 </div>
