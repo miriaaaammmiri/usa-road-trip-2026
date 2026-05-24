@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>USA Road Trip 2026 🇺🇸</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --cream: #F5EDD6; --dark: #1A1208; --rust: #C4441C;
+  --amber: #E8A020; --tan: #D4B483; --green: #2D5A27;
+  --sky: #4A90C4; --paper: #EDE0C4;
+}
+body {
+  background: var(--dark); color: var(--cream);
+  font-family: 'Montserrat', sans-serif; min-height: 100vh;
+  background-image: radial-gradient(ellipse at top, #2A1A08 0%, #1A1208 60%);
+}
+.header { background: var(--rust); position: relative; overflow: hidden; border-bottom: 4px solid var(--amber); }
+.header-inner { max-width: 900px; margin: 0 auto; padding: 20px 24px 16px; position: relative; z-index: 2; }
+.header-badge { font-family: 'Bebas Neue', sans-serif; font-size: 11px; letter-spacing: 4px; color: var(--amber); margin-bottom: 4px; }
+.header-title { font-family: 'Bebas Neue', sans-serif; font-size: 48px; letter-spacing: 3px; color: var(--cream); line-height: 1; }
+.header-sub { font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 500; color: rgba(245,237,214,0.75); margin-top: 8px; }
+.road-line { position: absolute; bottom: 0; left: 0; right: 0; height: 6px; background: repeating-linear-gradient(90deg, var(--amber) 0, var(--amber) 30px, transparent 30px, transparent 60px); opacity: 0.4; }
+.nav { background: #0F0B05; border-bottom: 1px solid rgba(196,68,28,0.3); position: sticky; top: 0; z-index: 100; }
+.nav-inner { max-width: 900px; margin: 0 auto; display: flex; overflow-x: auto; scrollbar-width: none; }
+.nav-inner::-webkit-scrollbar { display: none; }
+.nav-btn { background: none; border: none; color: rgba(245,237,214,0.5); font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; padding: 14px 20px; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s; white-space: nowrap; }
+.nav-btn:hover { color: var(--cream); }
+.nav-btn.active { color: var(--amber); border-bottom-color: var(--amber); }
+.main { max-width: 900px; margin: 0 auto; padding: 24px 16px 60px; }
+.section { display: none; }
+.section.active { display: block; }
+.section-title { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 3px; color: var(--cream); margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+.section-title::after { content: ''; flex: 1; height: 2px; background: linear-gradient(90deg, rgba(196,68,28,0.5), transparent); }
+
+/* DAY CARDS */
+.day-card { background: rgba(245,237,214,0.04); border: 1px solid rgba(196,68,28,0.25); border-radius: 8px; margin-bottom: 12px; overflow: hidden; transition: border-color 0.2s; }
+.day-card:hover { border-color: rgba(196,68,28,0.5); }
+.day-card.special { border-color: rgba(90,140,200,0.5); }
+.day-header { display: flex; align-items: center; gap: 16px; padding: 14px 18px; cursor: pointer; user-select: none; }
+.day-num { font-family: 'Bebas Neue', sans-serif; font-size: 32px; color: var(--rust); line-height: 1; min-width: 36px; }
+.day-info { flex: 1; }
+.day-date { font-size: 11px; font-weight: 600; color: var(--amber); letter-spacing: 0.5px; text-transform: uppercase; }
+.day-title { font-size: 14px; font-weight: 600; color: var(--cream); margin-top: 3px; }
+.day-meta { font-size: 11px; color: rgba(245,237,214,0.5); margin-top: 3px; }
+.day-chevron { color: rgba(245,237,214,0.3); font-size: 18px; transition: transform 0.2s; }
+.day-card.open .day-chevron { transform: rotate(180deg); }
+.day-body { display: none; padding: 0 18px 16px; border-top: 1px solid rgba(196,68,28,0.15); }
+.day-card.open .day-body { display: block; }
+.detail-row { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(245,237,214,0.06); font-size: 13px; color: rgba(245,237,214,0.8); line-height: 1.5; }
+.detail-row:last-child { border-bottom: none; }
+.detail-icon { font-size: 14px; min-width: 18px; margin-top: 1px; }
+.tag { display: inline-block; font-size: 10px; font-family: 'Montserrat', sans-serif; font-weight: 700; letter-spacing: 0.5px; padding: 2px 8px; border-radius: 3px; margin-left: 6px; }
+.tag-paid { background: var(--green); color: #90EE90; }
+.tag-topay { background: #3A1A08; color: var(--amber); border: 1px solid var(--amber); }
+.tag-special { background: rgba(74,144,196,0.2); color: #8CC4F0; border: 1px solid rgba(74,144,196,0.4); }
+.hotel-chip { display: inline-flex; align-items: center; gap: 6px; background: rgba(74,144,196,0.15); border: 1px solid rgba(74,144,196,0.3); border-radius: 4px; padding: 4px 10px; font-size: 12px; color: var(--sky); margin-top: 6px; }
+.warning-box { background: rgba(196,68,28,0.1); border: 1px solid rgba(196,68,28,0.4); border-radius: 6px; padding: 8px 12px; font-size: 12px; color: #F4A070; margin-top: 8px; display: flex; gap: 8px; align-items: flex-start; }
+.info-box { background: rgba(74,144,196,0.08); border: 1px solid rgba(74,144,196,0.3); border-radius: 6px; padding: 8px 12px; font-size: 12px; color: #8CC4F0; margin-top: 8px; display: flex; gap: 8px; align-items: flex-start; }
+
+/* MAP */
+#map { width: 100%; height: 520px; border-radius: 10px; border: 1px solid rgba(196,68,28,0.3); overflow: hidden; }
+.map-legend { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.map-legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: rgba(245,237,214,0.7); }
+.map-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+/* ESCURSIONI */
+.exc-card { background: rgba(245,237,214,0.04); border: 1px solid rgba(196,68,28,0.25); border-radius: 10px; padding: 18px; margin-bottom: 12px; }
+.exc-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+.exc-name { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 1px; color: var(--cream); line-height: 1.1; }
+.exc-date { font-size: 11px; font-weight: 600; color: var(--amber); margin-top: 4px; }
+.exc-price { font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: var(--rust); white-space: nowrap; }
+.exc-detail { font-size: 13px; color: rgba(245,237,214,0.6); margin-top: 10px; line-height: 1.6; }
+.exc-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(245,237,214,0.08); }
+
+/* CHECKLIST */
+.checklist-section { margin-bottom: 28px; }
+.checklist-label { font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--amber); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+.checklist-label::after { content: ''; flex: 1; height: 1px; background: rgba(232,160,32,0.2); }
+.check-item { display: flex; align-items: center; gap: 12px; padding: 10px 14px; background: rgba(245,237,214,0.03); border: 1px solid rgba(245,237,214,0.08); border-radius: 6px; margin-bottom: 6px; cursor: pointer; transition: all 0.2s; }
+.check-item:hover { background: rgba(245,237,214,0.06); }
+.check-item.done { opacity: 0.5; }
+.check-box { width: 20px; height: 20px; border: 2px solid var(--rust); border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.2s; }
+.check-item.done .check-box { background: var(--green); border-color: var(--green); }
+.check-tick { color: #90EE90; font-size: 13px; display: none; }
+.check-item.done .check-tick { display: block; }
+.check-text { font-size: 13px; color: var(--cream); flex: 1; }
+.check-item.done .check-text { text-decoration: line-through; color: rgba(245,237,214,0.4); }
+.progress-bar-wrap { background: rgba(245,237,214,0.1); border-radius: 4px; height: 6px; margin-bottom: 20px; overflow: hidden; }
+.progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--rust), var(--amber)); border-radius: 4px; transition: width 0.4s; }
+.progress-label { font-size: 12px; font-weight: 500; color: rgba(245,237,214,0.5); margin-bottom: 6px; }
+
+/* COSTI */
+.cost-total { background: var(--rust); border-radius: 10px; padding: 20px 24px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+.cost-total-label { font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: rgba(245,237,214,0.75); }
+.cost-total-amount { font-family: 'Bebas Neue', sans-serif; font-size: 42px; color: var(--cream); line-height: 1; }
+.cost-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: rgba(245,237,214,0.03); border: 1px solid rgba(245,237,214,0.08); border-radius: 6px; margin-bottom: 6px; }
+.cost-name { font-size: 13px; font-weight: 500; color: var(--cream); }
+.cost-sub { font-size: 11px; color: rgba(245,237,214,0.4); margin-top: 2px; }
+.cost-amount { font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: var(--amber); }
+.cost-section-title { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--tan); margin: 20px 0 10px; display: flex; align-items: center; gap: 8px; }
+.cost-section-title::after { content: ''; flex: 1; height: 1px; background: rgba(212,180,131,0.2); }
+
+/* GRUPPO */
+.member-card { display: flex; align-items: center; gap: 14px; padding: 14px 16px; background: rgba(245,237,214,0.04); border: 1px solid rgba(245,237,214,0.08); border-radius: 8px; margin-bottom: 8px; }
+.member-avatar { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Montserrat', sans-serif; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+.member-name { font-size: 15px; font-weight: 600; color: var(--cream); }
+.member-role { font-size: 12px; color: rgba(245,237,214,0.5); margin-top: 2px; }
+.member-tag { font-size: 11px; font-weight: 600; color: var(--amber); margin-left: auto; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="header-badge">★ SUMMER 2026 ★</div>
+    <div class="header-title">USA ROAD TRIP</div>
+    <div class="header-sub">Los Angeles &nbsp;·&nbsp; California &nbsp;·&nbsp; Southwest &nbsp;&nbsp;◆&nbsp;&nbsp; 17–29 Agosto 2026</div>
+  </div>
+  <div class="road-line"></div>
+</div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <button class="nav-btn active" onclick="showSection('itinerario',this)">Itinerario</button>
+    <button class="nav-btn" onclick="showSection('mappa',this)">Mappa</button>
+    <button class="nav-btn" onclick="showSection('escursioni',this)">Escursioni</button>
+    <button class="nav-btn" onclick="showSection('checklist',this)">Checklist</button>
+    <button class="nav-btn" onclick="showSection('costi',this)">Costi</button>
+    <button class="nav-btn" onclick="showSection('gruppo',this)">Gruppo</button>
+  </div>
+</nav>
+
+<div class="main">
+  <div id="itinerario" class="section active"><div class="section-title">Itinerario</div><div id="days-container"></div></div>
+
+  <div id="mappa" class="section">
+    <div class="section-title">Mappa del Viaggio</div>
+    <div id="map"></div>
+    <div class="map-legend">
+      <div class="map-legend-item"><div class="map-dot" style="background:#4A90C4;"></div>Tappe principali</div>
+      <div class="map-legend-item"><div class="map-dot" style="background:#C4441C;"></div>Escursioni prenotate</div>
+      <div class="map-legend-item" style="margin-left:auto;font-style:italic;font-size:11px;">Percorso indicativo — ~4.800 km totali</div>
+    </div>
+  </div>
+
+  <div id="escursioni" class="section"><div class="section-title">Escursioni</div><div id="exc-container"></div></div>
+  <div id="checklist" class="section"><div class="section-title">Da fare</div><div class="progress-label" id="progress-label">0 / 0 completati</div><div class="progress-bar-wrap"><div class="progress-bar-fill" id="progress-fill" style="width:0%"></div></div><div id="checklist-container"></div></div>
+  <div id="costi" class="section"><div class="section-title">Costi</div><div id="costi-container"></div></div>
+  <div id="gruppo" class="section"><div class="section-title">Il Gruppo</div><div id="gruppo-container"></div></div>
+</div>
+
+<script>
+const days=[
+  {n:1,date:"Domenica 17 Agosto",title:"LAX → Pismo Beach",drive:"~3 ore di guida",hotel:"Ocean Palms Motel, Pismo Beach",special:false,items:[{icon:"✈️",text:"Decollo da Milano Linate ore 07:25 (volo BA0581)"},{icon:"🔗",text:"Scalo Londra Heathrow Terminal 5 · 11:40 → LAX (AY5469)"},{icon:"🛬",text:"Arrivo LAX ore 14:55 (ora locale) — calcola ~3h per uscire"},{icon:"🚗",text:"Ritiro auto ore ~18:00 · Volvo XC40 (Hertz Burbank) + Toyota RAV4 (Avis LAX)"},{icon:"🌊",text:"Pismo Pier e tramonto sull'oceano, cena"}],warning:null,info:null},
+  {n:2,date:"Lunedì 18 Agosto",title:"Pismo Beach → San Francisco",drive:"~4 ore di guida",hotel:"Nob Hill Hotel, San Francisco",special:false,items:[{icon:"⏰",text:"Partenza ore 07:30"},{icon:"🌉",text:"Arrivo San Francisco ore ~11:30 · pranzo"},{icon:"⛓️",text:"Alcatraz Tour ore 14:30 · 6 adulti · 82€ cad · durata 3h",paid:false},{icon:"🌁",text:"Golden Gate Bridge ore ~17:30–18:00 · cena"}],warning:null,info:null},
+  {n:3,date:"Martedì 19 Agosto",title:"San Francisco → Sequoia NP → Kernville",drive:"~7 ore di guida (giornata intensa!)",hotel:"Quiet Mind Lodge, Kernville",special:false,items:[{icon:"⏰",text:"Partenza ore 07:00 (anticipata per avere più tempo a Sequoia)"},{icon:"🌲",text:"Sequoia National Park: giro panoramico (General Sherman Tree ecc.)"},{icon:"🏕️",text:"Arrivo a Kernville in serata"}],warning:"Giornata di guida molto lunga. SF → Sequoia = ~4h, poi Sequoia → Kernville = ~1.5h. Partenza anticipata alle 7:00!",info:null},
+  {n:4,date:"Mercoledì 20 Agosto",title:"Kernville → Death Valley → Las Vegas",drive:"~5h30 di guida",hotel:"SAHARA Las Vegas",special:false,items:[{icon:"⏰",text:"Partenza ore 08:00"},{icon:"🏜️",text:"Death Valley: Badwater Basin, Zabriskie Point"},{icon:"🛸",text:"Zona Beatty / Area 51 (Extraterrestrial Highway)"},{icon:"🎰",text:"Arrivo Las Vegas in serata"}],warning:null,info:null},
+  {n:5,date:"Giovedì 21 Agosto",title:"Las Vegas",drive:"Giorno libero in città",hotel:"SAHARA Las Vegas",special:false,items:[{icon:"🌅",text:"Mattinata libera"},{icon:"🏊",text:"Pranzo e piscina all'hotel"},{icon:"🔮",text:"The Sphere — The Wizard of Oz ore 14:00 · 4+2 biglietti · Sez. 405, Fila 12",paid:true},{icon:"🎲",text:"Serata libera sul Strip"}],warning:null,info:null},
+  {n:6,date:"Venerdì 22 Agosto",title:"Las Vegas → Bryce Canyon → Monument Valley",drive:"~7.5–8 ore di guida totali",hotel:"Wetherill Inn, Kayenta",special:false,items:[{icon:"⏰",text:"Partenza ore 06:00 (obbligatorio — giornata lunghissima)"},{icon:"🏔️",text:"Bryce Canyon National Park: Bryce Point, Sunset Point — non indugiare troppo"},{icon:"🗿",text:"Monument Valley: panoramica dei Mittens e Merrick Butte"}],warning:"⚠️ Giornata più dura del viaggio: LV→Bryce ~4h + Bryce→Kayenta ~3.5h + soste = oltre 8h di guida. Antelope Canyon il 23 alle 9:00 è inamovibile.",info:null},
+  {n:7,date:"Sabato 23 Agosto",title:"Kayenta → Antelope Canyon → Horseshoe Bend → Grand Canyon → Seligman",drive:"~7 ore di guida totali",hotel:"Supai Motel, Seligman",special:false,items:[{icon:"⏰",text:"Partenza ore 07:15"},{icon:"🏜️",text:"Lower Antelope Canyon ore 09:00 · tour guidato Navajo · 6 adulti · già pagato ✓",paid:true},{icon:"🎣",text:"Horseshoe Bend — 15 min da Antelope, sosta ~1h"},{icon:"🏞️",text:"Grand Canyon South Rim: Mather Point e Yavapai Point — sosta ~2h"},{icon:"🛣️",text:"Route 66 e arrivo a Seligman"}],warning:null,info:"Giornata impegnativa ma ben strutturata geograficamente. Non rilassarti troppo a ogni sosta."},
+  {n:8,date:"Domenica 24 Agosto",title:"Seligman → San Diego (via Route 66)",drive:"~7 ore con soste",hotel:"Uptown Inn, San Diego",special:false,items:[{icon:"⏰",text:"Partenza ore 07:00"},{icon:"🏚️",text:"Amboy — Roy's Motel & Café: insegna al neon anni '50, simbolo della Route 66"},{icon:"🛣️",text:"Barstow — Route 66 Mother Road Museum e murales sulla Main Street"},{icon:"🌵",text:"Bottle Tree Ranch (Oro Grande) — una delle attrazioni più stravaganti della Mother Road"},{icon:"🌊",text:"Arrivo San Diego in serata"}],warning:null,info:null},
+  {n:9,date:"Lunedì 25 Agosto",title:"San Diego",drive:"Giorno libero in città",hotel:"Uptown Inn, San Diego",special:false,items:[{icon:"🌳",text:"Balboa Park (musei, giardini)"},{icon:"🦭",text:"La Jolla Cove (leoni marini)"},{icon:"🍸",text:"Gaslamp Quarter la sera"}],warning:null,info:null},
+  {n:10,date:"Martedì 26 Agosto",title:"San Diego → Poway → Los Angeles",drive:"~2.5 ore di guida",hotel:"Hilton Los Angeles Airport",special:true,items:[{icon:"⏰",text:"Partenza ore 08:00"},{icon:"🎸",text:"Poway — città natale dei Blink-182: Poway High School e Sombrero Restaurant (citato in 'Josie')",special:true},{icon:"🍔",text:"Pranzo a Los Angeles ore ~11:30"},{icon:"🎥",text:"Warner Bros. Studio Tour Hollywood ore 14:30 · 4 adulti · già pagato ✓ · ~3h",paid:true},{icon:"🌅",text:"Aperitivo / cena a Santa Monica"}],warning:null,info:"🎵 Blink-182 si sono formati nel 1992 proprio a Poway! Tom DeLonge e Mark Hoppus frequentavano la Poway High School. Il Sombrero è il ristorante citato nella canzone 'Josie'."},
+  {n:11,date:"Mercoledì 27 Agosto",title:"Los Angeles — Hollywood & Beverly Hills",drive:"Giorno in città",hotel:"Hilton Los Angeles Airport",special:false,items:[{icon:"⏰",text:"Ore 09:00 — Hollywood Walk of Fame"},{icon:"🔭",text:"Ore 11:00 — Griffith Observatory: vista su tutta LA e sull'Hollywood Sign"},{icon:"🌮",text:"Pranzo a Los Feliz / Silver Lake"},{icon:"💎",text:"Ore 15:00 — Beverly Hills e Rodeo Drive"},{icon:"🍹",text:"Aperitivo / cena a West Hollywood — Sunset Strip"}],warning:null,info:"Hollywood Walk of Fame e Griffith Observatory sono nella stessa zona — conviene fare entrambi al mattino prima che faccia troppo caldo."},
+  {n:12,date:"Giovedì 28 Agosto",title:"Los Angeles — Venice Beach & Santa Monica",drive:"Giornata in spiaggia 🌊",hotel:"Hilton Los Angeles Airport",special:false,items:[{icon:"⏰",text:"Ore 09:00 — Venice Beach: boardwalk, skate park, buskers, campi di basket"},{icon:"🚶",text:"Passeggiata sul lungomare fino a Santa Monica (~20 min a piedi)"},{icon:"🏖️",text:"Bagno e relax sulla spiaggia di Santa Monica"},{icon:"🍹",text:"Pranzo in un chiosco o ristorante sul lungomare"},{icon:"🎡",text:"Pomeriggio: Santa Monica Pier — ruota panoramica, tramonto sul Pacifico"},{icon:"🌅",text:"Ultimo tramonto californiano sull'oceano 🌅"}],warning:null,info:"È l'ultimo giorno pieno prima del volo — godetevi la spiaggia senza fretta. Domani si parte."},
+  {n:13,date:"Venerdì 29 Agosto",title:"Los Angeles → Volo di rientro",drive:"Ultimo giorno",hotel:"—",special:false,items:[{icon:"🌅",text:"Mattina libera"},{icon:"⏰",text:"Partenza per LAX ore 13:00"},{icon:"🚗",text:"Restituzione auto e check-in"},{icon:"✈️",text:"Volo AY3782 LAX → Londra ore 16:20 (arr. +1 alle 10:50)"}],warning:null,info:null},
+  {n:14,date:"Sabato 30 Agosto",title:"Londra → Milano Linate",drive:"Rientro",hotel:"—",special:false,items:[{icon:"🏠",text:"Arrivo a Londra alle 10:50"},{icon:"🍽️",text:"Pranzo in aeroporto"},{icon:"✈️",text:"Volo BA7305 da London City ore 15:45 → Milano Linate 18:40"}],warning:null,info:null},
+];
+
+const excursions=[
+  {name:"Alcatraz Tour",date:"Lunedì 18 Agosto · ore 14:30",persons:"6 adulti",price:"€ 492",priceUnit:"82€ × 6",duration:"~3 ore",paid:false,note:"Traghetto da Pier 33 incluso. Biglietti ancora da pagare — verifica disponibilità.",color:"#4A90C4"},
+  {name:"The Sphere — Wizard of Oz",date:"Giovedì 21 Agosto · ore 14:00",persons:"6 biglietti (4 + 2 sep.)",price:"~€ 588",priceUnit:"98€ × 6",duration:"~1h30",paid:true,note:"Sezione 405, Fila 12, Posti 27–30. Order #29-39650/NEV. Due prenotazioni separate.",color:"#E8A020"},
+  {name:"Lower Antelope Canyon",date:"Sabato 23 Agosto · ore 09:00",persons:"6 adulti",price:"€ 516",priceUnit:"86€ × 6",duration:"~1 ora",paid:true,note:"Tour guidato Navajo — già prenotato e pagato ✓. Punto di incontro: Page, Arizona.",color:"#C4441C"},
+  {name:"Warner Bros. Studio Tour",date:"Martedì 26 Agosto · ore 14:30",persons:"4 adulti",price:"€ 260",priceUnit:"65€ × 4",duration:"~3 ore",paid:true,note:"Hollywood. Prenotato per 4 persone — verificare se Zia Lucia e Vittorio vogliono aggiungere biglietti.",color:"#2D5A27"},
+];
+
+const checklists={
+  "Prima della partenza":[
+    {text:"Acquistare ESTA (Electronic System for Travel Authorization)"},{text:"Acquistare assicurazione di viaggio"},{text:"America The Beautiful Pass (parchi nazionali)"},{text:"Pagare Alcatraz (biglietti da confermare)"},{text:"Check-in online volo Finnair (apre 36h prima)"},{text:"Scaricare app offline mappe (Google Maps / Maps.me)"},{text:"Valuta: cambiare qualche dollaro o caricare carta multi-valuta"},{text:"Comunicare numero di prenotazione hotel al gruppo"},{text:"Verificare patente internazionale per guida USA"},
+  ],
+  "Cosa portare":[
+    {text:"Passaporto valido (+ fotocopia)"},{text:"Patente di guida originale"},{text:"Adattatore prese elettriche USA (tipo A/B)"},{text:"Crema solare alta protezione"},{text:"Scarpe da trekking (Sequoia, Grand Canyon, Horseshoe Bend)"},{text:"Giacca leggera (Death Valley di notte, Grand Canyon)"},{text:"Bottiglia acqua riutilizzabile"},{text:"Powerbank caricabatterie"},{text:"Costume da bagno (Venice Beach, Santa Monica, Pismo Beach)"},
+  ],
+  "Durante il viaggio":[
+    {text:"Attivare roaming o SIM USA"},{text:"Controllare orari Antelope Canyon la mattina del 23"},{text:"Cena — prenotazione consigliata a San Francisco"},
+  ]
+};
+
+const costs={
+  voli:[{name:"Voli andata e ritorno",sub:"Finnair · ref. 9BHOMW · 1 biglietto Nicola",amount:"€ 852"}],
+  hotel:[{name:"Ocean Palms Motel",sub:"Pismo Beach · 17–18 agosto",amount:"€ 341"},{name:"Nob Hill Hotel ×2",sub:"San Francisco · 18–19 agosto",amount:"€ 469"},{name:"Quiet Mind Lodge ×3",sub:"Kernville · 19–20 agosto",amount:"€ 409"},{name:"SAHARA Las Vegas",sub:"Las Vegas · 20–22 agosto",amount:"€ 538"},{name:"Wetherill Inn ×2",sub:"Kayenta · 22–23 agosto",amount:"€ 374"},{name:"Supai Motel ×2",sub:"Seligman · 23–24 agosto",amount:"€ 262"},{name:"Uptown Inn ×2",sub:"San Diego · 24–26 agosto",amount:"€ 378"},{name:"Hilton LAX ×2",sub:"Los Angeles · 26–29 agosto",amount:"€ 1.123"}],
+  auto:[{name:"Volvo XC40 o simili",sub:"Hertz · Burbank · 17–29 agosto",amount:"€ 397"},{name:"Toyota RAV4 o simili",sub:"Avis · Los Angeles · 17–29 agosto",amount:"€ 670"}],
+  escursioni:[{name:"Alcatraz Tour ×6",sub:"82€ × 6 — da pagare",amount:"€ 492"},{name:"The Sphere Wizard of Oz",sub:"98€ × 6 — pagato ✓",amount:"~€ 588"},{name:"Antelope Canyon ×6",sub:"86€ × 6 — pagato ✓",amount:"€ 516"},{name:"Warner Bros. ×4",sub:"65€ × 4 — pagato ✓",amount:"€ 260"}],
+  dafare:[{name:"ESTA ×6",sub:"~21 USD a persona",amount:"~€ 120"},{name:"America The Beautiful Pass",sub:"Accesso parchi illimitato · 80 USD",amount:"~€ 75"},{name:"Assicurazione viaggio ×6",sub:"Da quotare",amount:"TBD"}]
+};
+
+const gruppo=[
+  {initials:"MI",name:"Miri",role:"Organizzatrice del viaggio",tag:"★ Trip planner",color:"#C4441C"},
+  {initials:"TH",name:"Thomas",role:"Moroso di Miri",tag:"🎸 Blink-182 fan",color:"#4A90C4"},
+  {initials:"DA",name:"Daniele",role:"Amico di Thomas",tag:"",color:"#2D5A27"},
+  {initials:"NI",name:"Nicola",role:"Cugino di Daniele",tag:"",color:"#6A4A90"},
+  {initials:"VI",name:"Vittorio",role:"Cugino di Miri",tag:"",color:"#B07830"},
+  {initials:"LU",name:"Zia Lucia",role:"Zia di Miri",tag:"",color:"#C4447A"},
+];
+
+// Route waypoints in order
+const waypoints = [
+  {lat:33.9425,lng:-118.4081,label:"LAX",paid:false},
+  {lat:35.1383,lng:-120.6445,label:"Pismo Beach",paid:false},
+  {lat:37.7749,lng:-122.4194,label:"San Francisco",paid:false},
+  {lat:36.4864,lng:-118.5658,label:"Sequoia NP",paid:false},
+  {lat:35.6559,lng:-118.4724,label:"Kernville",paid:false},
+  {lat:36.2461,lng:-116.8185,label:"Death Valley",paid:false},
+  {lat:36.1699,lng:-115.1398,label:"Las Vegas",paid:false},
+  {lat:37.5930,lng:-112.1871,label:"Bryce Canyon",paid:false},
+  {lat:36.9821,lng:-110.1119,label:"Monument Valley",paid:false},
+  {lat:36.8619,lng:-111.3743,label:"Antelope Canyon",paid:true},
+  {lat:36.8769,lng:-111.5057,label:"Horseshoe Bend",paid:false},
+  {lat:36.0544,lng:-112.1401,label:"Grand Canyon",paid:false},
+  {lat:35.3267,lng:-112.8885,label:"Seligman",paid:false},
+  {lat:32.7157,lng:-117.1611,label:"San Diego",paid:false},
+  {lat:32.9730,lng:-117.0359,label:"Poway 🎸",paid:false},
+  {lat:34.0522,lng:-118.2437,label:"Los Angeles",paid:false},
+];
+
+let map, directionsService, directionsRenderer;
+
+function initMap() {
+  const center = {lat:36.5,lng:-113.5};
+  map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 5,
+    center: center,
+    mapTypeId: 'roadmap',
+    styles: [
+      {elementType:'geometry',stylers:[{color:'#1a1208'}]},
+      {elementType:'labels.text.fill',stylers:[{color:'#d4b483'}]},
+      {elementType:'labels.text.stroke',stylers:[{color:'#1a1208'}]},
+      {featureType:'administrative',elementType:'geometry',stylers:[{color:'#3a2a10'}]},
+      {featureType:'administrative.country',elementType:'labels.text.fill',stylers:[{color:'#e8a020'}]},
+      {featureType:'road',elementType:'geometry',stylers:[{color:'#3a2a10'}]},
+      {featureType:'road',elementType:'geometry.stroke',stylers:[{color:'#c4441c'}]},
+      {featureType:'road.highway',elementType:'geometry',stylers:[{color:'#4a3010'}]},
+      {featureType:'road.highway',elementType:'geometry.stroke',stylers:[{color:'#c4441c'}]},
+      {featureType:'water',elementType:'geometry',stylers:[{color:'#0a2040'}]},
+      {featureType:'water',elementType:'labels.text.fill',stylers:[{color:'#4a90c4'}]},
+      {featureType:'poi.park',elementType:'geometry',stylers:[{color:'#1a2d10'}]},
+      {featureType:'landscape',elementType:'geometry',stylers:[{color:'#1e150a'}]},
+    ]
+  });
+
+  directionsService = new google.maps.DirectionsService();
+  directionsRenderer = new google.maps.DirectionsRenderer({
+    map: map,
+    suppressMarkers: true,
+    polylineOptions: {
+      strokeColor: '#4A90C4',
+      strokeWeight: 3,
+      strokeOpacity: 0.8,
+    }
+  });
+
+  // Draw route in segments (Google allows max 10 waypoints per request)
+  drawRoute(waypoints.slice(0,10));
+  setTimeout(() => drawRoute(waypoints.slice(9)), 1500);
+
+  // Add custom markers
+  waypoints.forEach((wp, i) => {
+    const marker = new google.maps.Marker({
+      position: {lat:wp.lat, lng:wp.lng},
+      map: map,
+      title: wp.label,
+      icon: {
+        path: google.maps.SymbolPath.CIRCLE,
+        scale: wp.paid ? 9 : 7,
+        fillColor: wp.paid ? '#C4441C' : '#E8A020',
+        fillOpacity: 1,
+        strokeColor: '#F5EDD6',
+        strokeWeight: 2,
+      },
+      label: {
+        text: String(i+1),
+        color: '#1A1208',
+        fontSize: '9px',
+        fontWeight: 'bold',
+        fontFamily: 'Montserrat'
+      }
+    });
+    const infoWindow = new google.maps.InfoWindow({
+      content: `<div style="background:#1a1208;color:#f5edd6;padding:8px 12px;border-radius:6px;font-family:Montserrat,sans-serif;font-size:13px;font-weight:600;border:1px solid #c4441c;">${wp.label}</div>`
+    });
+    marker.addListener('click', () => infoWindow.open(map, marker));
+  });
+}
+
+function drawRoute(pts) {
+  if (pts.length < 2) return;
+  const origin = {lat:pts[0].lat, lng:pts[0].lng};
+  const destination = {lat:pts[pts.length-1].lat, lng:pts[pts.length-1].lng};
+  const wps = pts.slice(1,-1).map(p=>({location:new google.maps.LatLng(p.lat,p.lng),stopover:false}));
+  directionsService.route({
+    origin, destination,
+    waypoints: wps,
+    travelMode: google.maps.TravelMode.DRIVING,
+    optimizeWaypoints: false,
+  }, (result, status) => {
+    if (status === 'OK') {
+      const r = new google.maps.DirectionsRenderer({
+        map, suppressMarkers: true,
+        polylineOptions: {strokeColor:'#4A90C4',strokeWeight:3,strokeOpacity:0.75}
+      });
+      r.setDirections(result);
+    }
+  });
+}
+
+function renderDays(){
+  const c=document.getElementById('days-container');
+  c.innerHTML=days.map((d,i)=>`<div class="day-card${d.special?' special':''}" id="day-${i}"><div class="day-header" onclick="toggleDay(${i})"><div class="day-num">${String(d.n).padStart(2,'0')}</div><div class="day-info"><div class="day-date">${d.date}</div><div class="day-title">${d.title}</div><div class="day-meta">${d.drive}${d.hotel!=='—'?' &nbsp;·&nbsp; 🏨 '+d.hotel.split(',')[0]:''}</div></div><div class="day-chevron">▾</div></div><div class="day-body">${d.items.map(it=>`<div class="detail-row"><span class="detail-icon">${it.icon}</span><span>${it.text}${it.paid===true?'<span class="tag tag-paid">Pagato ✓</span>':it.paid===false?'<span class="tag tag-topay">Da pagare</span>':it.special?'<span class="tag tag-special">🎸 Blink-182</span>':''}</span></div>`).join('')}${d.hotel!=='—'?`<div class="hotel-chip">🏨 ${d.hotel}</div>`:''}${d.warning?`<div class="warning-box"><span>⚠️</span><span>${d.warning}</span></div>`:''}${d.info?`<div class="info-box"><span>ℹ️</span><span>${d.info}</span></div>`:''}</div></div>`).join('');
+}
+
+function toggleDay(i){document.getElementById('day-'+i).classList.toggle('open');}
+
+function renderExcursions(){
+  const c=document.getElementById('exc-container');
+  c.innerHTML=excursions.map(e=>`<div class="exc-card" style="border-color:${e.color}40;"><div class="exc-top"><div><div class="exc-name">${e.name}</div><div class="exc-date">${e.date}</div></div><div class="exc-price">${e.price}</div></div><div class="exc-detail">${e.note}</div><div class="exc-footer"><span style="font-size:12px;color:rgba(245,237,214,0.5);">👥 ${e.persons} &nbsp;·&nbsp; ⏱ ${e.duration} &nbsp;·&nbsp; ${e.priceUnit}</span><span class="tag ${e.paid?'tag-paid':'tag-topay'}">${e.paid?'Pagato ✓':'Da pagare'}</span></div></div>`).join('');
+}
+
+let checkData={};
+function renderChecklist(){
+  const c=document.getElementById('checklist-container');
+  let html='',total=0,done=0;
+  Object.entries(checklists).forEach(([section,items])=>{
+    html+=`<div class="checklist-section"><div class="checklist-label">${section}</div>`;
+    items.forEach((item,idx)=>{
+      const key=section+'_'+idx;
+      if(!(key in checkData))checkData[key]=false;
+      total++;if(checkData[key])done++;
+      html+=`<div class="check-item ${checkData[key]?'done':''}" onclick="toggleCheck('${key}')"><div class="check-box"><span class="check-tick">✓</span></div><span class="check-text">${item.text}</span></div>`;
+    });
+    html+='</div>';
+  });
+  c.innerHTML=html;
+  document.getElementById('progress-label').textContent=`${done} / ${total} completati`;
+  document.getElementById('progress-fill').style.width=(total?Math.round(done/total*100):0)+'%';
+}
+function toggleCheck(key){checkData[key]=!checkData[key];renderChecklist();}
+
+function renderCosti(){
+  const c=document.getElementById('costi-container');
+  let html=`<div class="cost-total"><div><div class="cost-total-label">Totale stimato</div><div class="cost-total-label" style="margin-top:4px;opacity:0.6;">Esclusa assicurazione</div></div><div class="cost-total-amount">€ 6.864+</div></div>`;
+  [{title:'✈️ Voli',key:'voli'},{title:'🏨 Hotel',key:'hotel'},{title:'🚗 Auto a noleggio',key:'auto'},{title:'🎟️ Escursioni',key:'escursioni'},{title:'📋 Ancora da pagare',key:'dafare'}].forEach(s=>{
+    html+=`<div class="cost-section-title">${s.title}</div>`;
+    costs[s.key].forEach(r=>{html+=`<div class="cost-row"><div><div class="cost-name">${r.name}</div><div class="cost-sub">${r.sub}</div></div><div class="cost-amount">${r.amount}</div></div>`;});
+  });
+  c.innerHTML=html;
+}
+
+function renderGruppo(){
+  const c=document.getElementById('gruppo-container');
+  c.innerHTML=gruppo.map(m=>`<div class="member-card"><div class="member-avatar" style="background:${m.color}22;color:${m.color};border:1px solid ${m.color}44;">${m.initials}</div><div><div class="member-name">${m.name}</div><div class="member-role">${m.role}</div></div>${m.tag?`<div class="member-tag">${m.tag}</div>`:''}</div>`).join('')+
+  `<div style="margin-top:24px;padding:16px;background:rgba(245,237,214,0.04);border:1px solid rgba(245,237,214,0.1);border-radius:8px;"><div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--amber);margin-bottom:12px;">🚗 Auto</div><div style="font-size:13px;color:rgba(245,237,214,0.7);line-height:1.9;"><span style="font-weight:600;color:var(--cream);">Volvo XC40</span> — Hertz Burbank · ritiro 17 agosto<br><span style="font-weight:600;color:var(--cream);">Toyota RAV4</span> — Avis Los Angeles · ritiro 17 agosto<br><span style="color:rgba(245,237,214,0.4);font-size:11px;">Entrambe restituite il 29 agosto</span></div></div>`;
+}
+
+let mapInitialized = false;
+function showSection(id,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  if(id==='mappa' && !mapInitialized && typeof google !== 'undefined'){
+    mapInitialized=true;
+    initMap();
+  }
+}
+
+renderDays();renderExcursions();renderChecklist();renderCosti();renderGruppo();
+</script>
+
+<!-- Sostituisci YOUR_API_KEY con la tua Google Maps API Key -->
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=Function.prototype"></script>
+</body>
+</html>
