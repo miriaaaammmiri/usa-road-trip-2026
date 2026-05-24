@@ -109,6 +109,17 @@ body {
 .member-name { font-size: 15px; font-weight: 600; color: var(--cream); }
 .member-role { font-size: 12px; color: rgba(245,237,214,0.5); margin-top: 2px; }
 .member-tag { font-size: 11px; font-weight: 600; color: var(--amber); margin-left: auto; }
+/* METEO */
+.weather-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-bottom:20px;}
+.weather-card{background:rgba(245,237,214,0.04);border:1px solid rgba(196,68,28,0.25);border-radius:10px;padding:16px;text-align:center;}
+.weather-card.today{border-color:var(--amber);background:rgba(232,160,32,0.08);}
+.weather-city{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--amber);margin-bottom:6px;}
+.weather-icon{font-size:36px;margin:8px 0;}
+.weather-temp{font-family:"Bebas Neue",sans-serif;font-size:36px;color:var(--cream);line-height:1;}
+.weather-desc{font-size:11px;color:rgba(245,237,214,0.6);margin-top:4px;text-transform:capitalize;}
+.weather-details{display:flex;justify-content:center;gap:12px;margin-top:10px;font-size:11px;color:rgba(245,237,214,0.5);}
+.weather-loading{text-align:center;padding:40px;color:rgba(245,237,214,0.4);font-size:14px;}
+.today-label{display:inline-block;background:var(--amber);color:var(--dark);font-size:9px;font-weight:700;letter-spacing:1px;padding:2px 6px;border-radius:3px;margin-bottom:6px;}
 </style>
 <link rel="manifest" href="/manifest.json"><meta name="theme-color" content="#C4441C"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"></head>
 <body>
@@ -126,7 +137,7 @@ body {
   <div class="nav-inner">
     <button class="nav-btn active" onclick="showSection('itinerario',this)">Itinerario</button>
     <button class="nav-btn" onclick="showSection('mappa',this)">Mappa</button>
-    <button class="nav-btn" onclick="showSection('escursioni',this)">Escursioni</button>
+    <button class="nav-btn" onclick="showSection('meteo',this)">Meteo</button><button class="nav-btn" onclick="showSection('escursioni',this)">Escursioni</button>
     <button class="nav-btn" onclick="showSection('checklist',this)">Checklist</button>
     <button class="nav-btn" onclick="showSection('costi',this)">Costi</button>
     <button class="nav-btn" onclick="showSection('gruppo',this)">Gruppo</button>
@@ -146,7 +157,7 @@ body {
     </div>
   </div>
 
-  <div id="escursioni" class="section"><div class="section-title">Escursioni</div><div id="exc-container"></div></div>
+  <div id="meteo" class="section"><div class="section-title">Meteo</div><div id="weather-container"><div class="weather-loading">⛅ Caricamento meteo in corso...</div></div></div><div id="escursioni" class="section"><div class="section-title">Escursioni</div><div id="exc-container"></div></div>
   <div id="checklist" class="section"><div class="section-title">Da fare</div><div class="progress-label" id="progress-label">0 / 0 completati</div><div class="progress-bar-wrap"><div class="progress-bar-fill" id="progress-fill" style="width:0%"></div></div><div id="checklist-container"></div></div>
   <div id="costi" class="section"><div class="section-title">Costi</div><div id="costi-container"></div></div>
   <div id="gruppo" class="section"><div class="section-title">Il Gruppo</div><div id="gruppo-container"></div></div>
@@ -370,7 +381,7 @@ function showSection(id,btn){
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   btn.classList.add('active');
-  if(id==='mappa' && !mapInitialized && typeof google !== 'undefined'){
+  if(id==="meteo"&&!weatherLoaded){weatherLoaded=true;loadWeather();}if(id==="mappa"&&!mapInitialized&&typeof google!=="undefined"){
     mapInitialized=true;
     initMap();
   }
