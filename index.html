@@ -61,6 +61,28 @@ body {
 .hotel-paid.yes { background: #2D5A27; color: #90EE90; }
 .hotel-paid.no { background: #3A1A08; color: var(--amber); border: 1px solid var(--amber); }
 
+
+.hotel-card{background:rgba(245,237,214,0.04);border:1px solid rgba(196,68,28,0.25);border-radius:10px;margin-bottom:14px;overflow:hidden;}
+.hotel-card-header{padding:16px 18px;display:flex;align-items:center;gap:14px;cursor:pointer;}
+.hotel-night-badge{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--rust);min-width:36px;line-height:1;}
+.hotel-card-info{flex:1;}
+.hotel-card-name{font-size:15px;font-weight:700;color:var(--cream);}
+.hotel-card-location{font-size:12px;color:rgba(245,237,214,0.5);margin-top:2px;}
+.hotel-card-dates{font-size:11px;font-weight:600;color:var(--amber);margin-top:3px;text-transform:uppercase;letter-spacing:0.5px;}
+.hotel-card-body{display:none;padding:0 18px 18px;border-top:1px solid rgba(196,68,28,0.15);}
+.hotel-card.open .hotel-card-body{display:block;}
+.hotel-card.open .hotel-card-chevron{transform:rotate(180deg);}
+.hotel-card-chevron{color:rgba(245,237,214,0.3);font-size:18px;transition:transform 0.2s;}
+.hotel-info-row{display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-bottom:1px solid rgba(245,237,214,0.06);font-size:13px;color:rgba(245,237,214,0.8);}
+.hotel-info-row:last-child{border-bottom:none;}
+.hotel-booking-row{background:rgba(245,237,214,0.04);border:1px solid rgba(245,237,214,0.08);border-radius:8px;padding:12px 14px;margin-top:10px;}
+.hotel-booking-ref{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--amber);letter-spacing:1px;}
+.hotel-booking-sub{font-size:11px;color:rgba(245,237,214,0.5);margin-top:2px;}
+.hotel-btn{display:inline-flex;align-items:center;gap:6px;margin-top:10px;background:var(--rust);color:var(--cream);border:none;border-radius:6px;padding:8px 14px;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:600;cursor:pointer;text-decoration:none;}
+.hotel-paid{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:3px;margin-left:8px;}
+.hotel-paid.yes{background:#2D5A27;color:#90EE90;}
+.hotel-paid.no{background:#3A1A08;color:var(--amber);border:1px solid var(--amber);}
+
 /* DAY CARDS */
 .day-card { background: rgba(245,237,214,0.04); border: 1px solid rgba(196,68,28,0.25); border-radius: 8px; margin-bottom: 12px; overflow: hidden; transition: border-color 0.2s; }
 .day-card:hover { border-color: rgba(196,68,28,0.5); }
@@ -158,7 +180,7 @@ body {
     <button class="nav-btn" onclick="showSection('escursioni',this)">Escursioni</button>
     <button class="nav-btn" onclick="showSection('checklist',this)">Checklist</button>
     <button class="nav-btn" onclick="showSection('costi',this)">Costi</button>
-    <button class="nav-btn" onclick="showSection('hotel',this)">Hotel</button><button class="nav-btn" onclick="showSection('gruppo',this)">Gruppo</button>
+    <button class="nav-btn" onclick="showSection('hotel',this)">Hotel</button><button class="nav-btn" onclick="showSection('hotel',this)">Hotel</button><button class="nav-btn" onclick="showSection('gruppo',this)">Gruppo</button>
   </div>
 </nav>
 
@@ -237,6 +259,11 @@ body {
     <div class="section-title">Hotel</div>
     <div id="hotel-container"></div>
   </div>
+
+  <div id="hotel" class="section">
+    <div class="section-title">Hotel</div>
+    <div id="hotel-container"></div>
+  </div>
 <div id="gruppo" class="section"><div class="section-title">Il Gruppo</div><div id="gruppo-container"></div></div>
 </div>
 
@@ -259,10 +286,10 @@ const days=[
 ];
 
 const excursions=[
-  {name:"Alcatraz Tour",date:"Lunedì 18 Agosto · ore 14:30",persons:"6 adulti",price:"€ 492",priceUnit:"82€ × 6",duration:"~3 ore",paid:false,note:"Traghetto da Pier 33 incluso. Biglietti ancora da pagare — verifica disponibilità.",color:"#4A90C4"},
-  {name:"The Sphere — Wizard of Oz",date:"Giovedì 21 Agosto · ore 14:00",persons:"6 biglietti (4 + 2 sep.)",price:"~€ 588",priceUnit:"98€ × 6",duration:"~1h30",paid:true,note:"Sezione 405, Fila 12, Posti 27–30. Order #29-39650/NEV. Due prenotazioni separate.",color:"#E8A020"},
-  {name:"Lower Antelope Canyon",date:"Sabato 23 Agosto · ore 09:00",persons:"6 adulti",price:"€ 516",priceUnit:"86€ × 6",duration:"~1 ora",paid:true,note:"Tour guidato Navajo — già prenotato e pagato ✓. Punto di incontro: Page, Arizona.",color:"#C4441C"},
-  {name:"Warner Bros. Studio Tour",date:"Martedì 26 Agosto · ore 14:30",persons:"4 adulti",price:"€ 260",priceUnit:"65€ × 4",duration:"~3 ore",paid:true,note:"Hollywood. Prenotato per 4 persone — verificare se Zia Lucia e Vittorio vogliono aggiungere biglietti.",color:"#2D5A27"},
+  {name:"Alcatraz Tour",date:"Lunedì 18 Agosto · ore 14:30",persons:"6 adulti",price:"€ 492",priceUnit:"82€ × 6",duration:"~3 ore",paid:false,note:"Traghetto da Pier 33 incluso. Biglietti ancora da pagare.",color:"#4A90C4",link:""},
+  {name:"The Sphere — Wizard of Oz",date:"Giovedì 21 Agosto · ore 14:00",persons:"6 biglietti (4+2 sep.)",price:"~€ 588",priceUnit:"98€ × 6",duration:"~1h30",paid:true,note:"Sezione 405, Fila 12, Posti 27-30. Order 29-39650/NEV.",color:"#E8A020",link:"https://www.ticketmaster.com/user/orders"},
+  {name:"Lower Antelope Canyon",date:"Sabato 23 Agosto · ore 09:00",persons:"6 adulti",price:"€ 516",priceUnit:"86€ × 6",duration:"~1 ora",paid:true,note:"Tour guidato Navajo. Punto di incontro: Page, Arizona.",color:"#C4441C",link:"https://drive.google.com/file/d/1EUZjZEtfZkR7pfEZeyOB-L8byiJw5F-W/view?usp=drive_link"},
+  {name:"Warner Bros. Studio Tour",date:"Martedì 26 Agosto · ore 14:30",persons:"4 adulti",price:"€ 260",priceUnit:"65€ × 4",duration:"~3 ore",paid:true,note:"Hollywood. 4 biglietti — verificare Zia Lucia e Vittorio.",color:"#2D5A27",link:"https://drive.google.com/file/d/1N4QQ9dpg4sy65rhJ5Cu6oevJ73tc83q5/view?usp=drive_link"},
 ];
 
 const checklists={
@@ -404,33 +431,42 @@ function drawRoute(pts) {
   });
 }
 
-const hotels = [
+
+const hotels=[
   {day:1,name:"Ocean Palms Motel",location:"Pismo Beach, CA",address:"390 Ocean View Avenue, Pismo Beach, CA 93449",phone:"+1 805 773 4669",checkin:"17 Agosto · 15:00-21:00",checkout:"18 Agosto · entro 11:00",bookings:[{ref:"6849.012.615",pin:"6257",guests:"6 adulti · 3 camere King",price:"341",paid:true,link:"https://drive.google.com/file/d/1uMipb9boN3Q-rl1cZ6rvwkyvOuqK4WA9/view?usp=drive_link"}],notes:"Cancellazione gratuita fino a 2 giorni prima"},
   {day:2,name:"Nob Hill Hotel",location:"San Francisco, CA",address:"835 Hyde Street, San Francisco, CA 94109",phone:"+1 415 885 2987",checkin:"18 Agosto · dalle 15:00",checkout:"19 Agosto · entro 11:00",bookings:[{ref:"6110.069.381",pin:"8102",guests:"6 adulti · 3 camere Queen Deluxe",price:"378",paid:true,link:"https://drive.google.com/file/d/1EbJkA-BAquLrbC3mnZiTxwWpctvIUnmi/view?usp=drive_link"}],notes:"Colazione inclusa. Cancellazione gratuita fino a 2 giorni prima"},
   {day:3,name:"Quiet Mind Lodge",location:"Kernville, CA",address:"100 Mountain Highway 99, Kernville, CA 93238",phone:"+1 619 761 6959",checkin:"19 Agosto · 15:00-21:00",checkout:"20 Agosto · 08:00-11:00",bookings:[{ref:"5722.812.610",pin:"7492",guests:"2 adulti · Suite Junior Vista Montagna",price:"126",paid:true,link:"https://drive.google.com/file/d/143Bn3XxbSzpXA6JDP9vjneLIccovVOmY/view?usp=drive_link"},{ref:"6821.660.403",pin:"9064",guests:"2 adulti · Junior Suite Deluxe",price:"128",paid:true,link:"https://drive.google.com/file/d/1T-MCqRdz4uFvNjelO1mj6RCLZsYC9VuL/view?usp=drive_link"},{ref:"5296.862.531",pin:"0742",guests:"2 adulti · Suite Junior Vista Montagna",price:"155",paid:true,link:"https://drive.google.com/file/d/15VVuHaOxB406EjuIeaTT0nqg_vyJJkfL/view?usp=drive_link"}],notes:"Colazione inclusa. Arrivo previsto 20:00-21:00"},
   {day:5,name:"Flamingo Las Vegas Hotel & Casino",location:"Las Vegas, NV",address:"3555 Las Vegas Boulevard, Las Vegas, NV 89109",phone:"+1 833 914 3190",checkin:"20 Agosto · dalle 16:00",checkout:"22 Agosto · entro 11:00",bookings:[{ref:"6616.441.669",pin:"9693",guests:"6 adulti · 3 camere",price:"527",paid:false,link:"https://drive.google.com/file/d/1hjqaoWOct2jKjp5yxuPmlTbquao0AlDv/view?usp=drive_link"}],notes:"Da pagare. Deposito 150 dollari arrivo. Parcheggio 20 dollari al giorno"},
   {day:6,name:"Hampton Inn Kayenta",location:"Kayenta, AZ",address:"US Highway 160, Kayenta, AZ 86033",phone:"+1 928 697 3170",checkin:"22 Agosto · 16:00-22:00",checkout:"23 Agosto · entro 10:00",bookings:[{ref:"5562.511.890",pin:"1192",guests:"6 adulti · 2 camere King con Sofa Bed",price:"453",paid:true,link:"https://drive.google.com/file/d/1H9je7zoCDkljry3qrgLGrs85aeudqOuT/view?usp=drive_link"}],notes:"Colazione inclusa. Checkout entro 10:00 - Antelope Canyon alle 9:00!"},
-  {day:7,name:"Supai Motel",location:"Seligman, AZ",address:"22450 Old Highway 66, Seligman, AZ 86337",phone:"+1 928 422 4153",checkin:"23 Agosto · 16:00-22:00",checkout:"24 Agosto · mezzanotte",bookings:[{ref:"5241.562.975",pin:"6267",guests:"2 adulti · Camera Standard 2 letti",price:"98",paid:true,link:"https://drive.google.com/file/d/1Rz-z0nCUvGHpmUpZrgNKaq03GnEjaDQh/view?usp=drive_link"},{ref:"6976.878.424",pin:"8477",guests:"4 adulti · Camera King + Camera Queen",price:"163",paid:true,link:"https://drive.google.com/file/d/1Epj2nXuo8bKJQppMA1-EgaxXWtcUwhXf/view?usp=drive_link"}],notes:"Arrivi dopo le 23:30 considerati mancata presentazione - avvisare!"},
+  {day:7,name:"Supai Motel",location:"Seligman, AZ",address:"22450 Old Highway 66, Seligman, AZ 86337",phone:"+1 928 422 4153",checkin:"23 Agosto · 16:00-22:00",checkout:"24 Agosto · mezzanotte",bookings:[{ref:"5241.562.975",pin:"6267",guests:"2 adulti · Camera Standard 2 letti",price:"98",paid:true,link:"https://drive.google.com/file/d/1Rz-z0nCUvGHpmUpZrgNKaq03GnEjaDQh/view?usp=drive_link"},{ref:"6976.878.424",pin:"8477",guests:"4 adulti · Camera King + Camera Queen",price:"163",paid:true,link:"https://drive.google.com/file/d/1Epj2nXuo8bKJQppMA1-EgaxXWtcUwhXf/view?usp=drive_link"}],notes:"Arrivi dopo le 23:30 = mancata presentazione - avvisare!"},
   {day:8,name:"Uptown Inn",location:"San Diego, CA",address:"819 University Avenue, Hillcrest, San Diego, CA 92103",phone:"+1 619 344 8977",checkin:"24 Agosto · 15:00-21:00",checkout:"26 Agosto · entro 11:00",bookings:[{ref:"5570.417.899",pin:"7375",guests:"4 adulti · Double Bed Studio",price:"209",paid:true,link:"https://drive.google.com/file/d/1-GNCU2sJd95hIgCmYHoemyP-EuBJ_A1d/view?usp=drive_link"},{ref:"5287.031.274",pin:"2753",guests:"2 adulti · Queen Studio East",price:"169",paid:false,link:"https://drive.google.com/file/d/1qMjYQ5mh2uPNaWR0biDjYM3QZ9m4VkwR/view?usp=drive_link"}],notes:"Rumore cantiere 7-8am. Parcheggio 25 dollari al giorno. 2 notti"},
-  {day:10,name:"Hilton Los Angeles Airport",location:"Los Angeles, CA",address:"5711 West Century Boulevard, Los Angeles, CA 90045",phone:"+1 310 410 4000",checkin:"26 Agosto · 16:00-23:00",checkout:"29 Agosto · entro 12:00",bookings:[{ref:"5899.324.283",pin:"8602",guests:"4 adulti · Camera 2 letti matrimoniali",price:"624",paid:false,link:"https://drive.google.com/file/d/1RRuoNeIKfhWlYMLM0qbaX1_W-S4dSWG0/view?usp=drive_link"},{ref:"5287.034.161",pin:"4914",guests:"2 adulti · Camera King con Vasca",price:"499",paid:true,link:"https://drive.google.com/file/d/1LSI8-mR50b3huPdGWXkU65vJUdABJLfu/view?usp=drive_link"}],notes:"Da pagare. Parcheggio 65 dollari al giorno. WiFi 12.95 dollari al giorno. 3 notti"},
+  {day:10,name:"Hilton Los Angeles Airport",location:"Los Angeles, CA",address:"5711 West Century Boulevard, Los Angeles, CA 90045",phone:"+1 310 410 4000",checkin:"26 Agosto · 16:00-23:00",checkout:"29 Agosto · entro 12:00",bookings:[{ref:"5899.324.283",pin:"8602",guests:"4 adulti · Camera 2 letti matrimoniali",price:"624",paid:false,link:"https://drive.google.com/file/d/1RRuoNeIKfhWlYMLM0qbaX1_W-S4dSWG0/view?usp=drive_link"},{ref:"5287.034.161",pin:"4914",guests:"2 adulti · Camera King con Vasca",price:"499",paid:true,link:"https://drive.google.com/file/d/1LSI8-mR50b3huPdGWXkU65vJUdABJLfu/view?usp=drive_link"}],notes:"Da pagare (1 camera). Parcheggio 65 dollari al giorno. WiFi 12.95 dollari. 3 notti"},
 ];
+
 function toggleHotel(i){document.getElementById('hotel-card-'+i).classList.toggle('open');}
+
 function renderHotels(){
   const c=document.getElementById('hotel-container');
   if(!c)return;
-  c.innerHTML=hotels.map((h,i)=>'<div class="hotel-card" id="hotel-card-'+i+'"><div class="hotel-card-header" onclick="toggleHotel('+i+')"><div class="hotel-night-badge">'+String(h.day).padStart(2,'0')+'</div><div class="hotel-card-info"><div class="hotel-card-name">'+h.name+'</div><div class="hotel-card-location">'+h.location+'</div><div class="hotel-card-dates">'+h.checkin+' - '+h.checkout+'</div></div><div class="hotel-card-chevron">v</div></div><div class="hotel-card-body"><div class="hotel-info-row"><span>Tel: '+h.phone+'</span></div><div class="hotel-info-row"><span>'+h.address+'</span></div><div class="hotel-info-row"><span>'+h.notes+'</span></div>'+h.bookings.map(function(b){return '<div class="hotel-booking-row"><div class="hotel-booking-ref">Conf. '+b.ref+'</div><div class="hotel-booking-sub">PIN: '+b.pin+' - '+b.guests+(b.price?' - Euro '+b.price:'')+'</div><span class="hotel-paid '+(b.paid?'yes':'no')+'">'+(b.paid?'Pagato':'Da pagare')+'</span><br><a href="'+b.link+'" target="_blank" class="hotel-btn">Apri conferma</a></div>';}).join('')+'</div></div>').join('');
+  c.innerHTML=hotels.map((h,i)=>{
+    const bookings=h.bookings.map(b=>'<div class="hotel-booking-row"><div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;"><div><div class="hotel-booking-ref">Conf. '+b.ref+'</div><div class="hotel-booking-sub">PIN: '+b.pin+' · '+b.guests+(b.price?' · € '+b.price:'')+'</div></div><span class="hotel-paid '+(b.paid?'yes':'no')+'">'+(b.paid?'Pagato ✓':'Da pagare')+'</span></div><a href="'+b.link+'" target="_blank" class="hotel-btn">Apri conferma</a></div>').join('');
+    return '<div class="hotel-card" id="hotel-card-'+i+'"><div class="hotel-card-header" onclick="toggleHotel('+i+')"><div class="hotel-night-badge">'+String(h.day).padStart(2,'0')+'</div><div class="hotel-card-info"><div class="hotel-card-name">'+h.name+'</div><div class="hotel-card-location">'+h.location+'</div><div class="hotel-card-dates">'+h.checkin+' → '+h.checkout+'</div></div><div class="hotel-card-chevron">▾</div></div><div class="hotel-card-body"><div class="hotel-info-row"><span>📞 '+h.phone+'</span></div><div class="hotel-info-row"><span>📍 '+h.address+'</span></div><div class="hotel-info-row"><span>ℹ️ '+h.notes+'</span></div>'+bookings+'</div></div>';
+  }).join('');
 }
 
 function renderDays(){
   const c=document.getElementById('days-container');
-  c.innerHTML=days.map((d,i)=>`<div class="day-card${d.special?' special':''}" id="day-${i}"><div class="day-header" onclick="toggleDay(${i})"><div class="day-num">${String(d.n).padStart(2,'0')}</div><div class="day-info"><div class="day-date">${d.date}</div><div class="day-title">${d.title}</div><div class="day-meta">${d.drive}${d.hotel!=='—'?' &nbsp;·&nbsp; 🏨 '+d.hotel.split(',')[0]:''}</div></div><div class="day-chevron">▾</div></div><div class="day-body">${d.items.map(it=>`<div class="detail-row"><span class="detail-icon">${it.icon}</span><span>${it.text}${it.paid===true?'<span class="tag tag-paid">Pagato ✓</span>':it.paid===false?'<span class="tag tag-topay">Da pagare</span>':it.special?'<span class="tag tag-special">🎸 Blink-182</span>':''}</span></div>`).join('')}${d.hotel!=='—'?`<div class="hotel-chip">🏨 ${d.hotel}</div>`:''}${d.warning?`<div class="warning-box"><span>⚠️</span><span>${d.warning}</span></div>`:''}${d.info?`<div class="info-box"><span>ℹ️</span><span>${d.info}</span></div>`:''}${e.link?`<a href="${e.link}" target="_blank" style="display:inline-block;margin-top:10px;background:var(--rust);color:var(--cream);padding:6px 14px;border-radius:6px;font-size:12px;font-weight:600;text-decoration:none;">📄 Apri biglietto</a>`:""}</div></div>`).join('');
+  c.innerHTML=days.map((d,i)=>`<div class="day-card${d.special?' special':''}" id="day-${i}"><div class="day-header" onclick="toggleDay(${i})"><div class="day-num">${String(d.n).padStart(2,'0')}</div><div class="day-info"><div class="day-date">${d.date}</div><div class="day-title">${d.title}</div><div class="day-meta">${d.drive}${d.hotel!=='—'?' &nbsp;·&nbsp; 🏨 '+d.hotel.split(',')[0]:''}</div></div><div class="day-chevron">▾</div></div><div class="day-body">${d.items.map(it=>`<div class="detail-row"><span class="detail-icon">${it.icon}</span><span>${it.text}${it.paid===true?'<span class="tag tag-paid">Pagato ✓</span>':it.paid===false?'<span class="tag tag-topay">Da pagare</span>':it.special?'<span class="tag tag-special">🎸 Blink-182</span>':''}</span></div>`).join('')}${d.hotel!=='—'?`<div class="hotel-chip">🏨 ${d.hotel}</div>`:''}${d.warning?`<div class="warning-box"><span>⚠️</span><span>${d.warning}</span></div>`:''}${d.info?`<div class="info-box"><span>ℹ️</span><span>${d.info}</span></div>`:''}</div></div>`).join('');
 }
 
 function toggleDay(i){document.getElementById('day-'+i).classList.toggle('open');}
 
 function renderExcursions(){
   const c=document.getElementById('exc-container');
-  c.innerHTML=excursions.map(e=>`<div class="exc-card" style="border-color:${e.color}40;"><div class="exc-top"><div><div class="exc-name">${e.name}</div><div class="exc-date">${e.date}</div></div><div class="exc-price">${e.price}</div></div><div class="exc-detail">${e.note}</div><div class="exc-footer"><span style="font-size:12px;color:rgba(245,237,214,0.5);">👥 ${e.persons} &nbsp;·&nbsp; ⏱ ${e.duration} &nbsp;·&nbsp; ${e.priceUnit}</span><span class="tag ${e.paid?'tag-paid':'tag-topay'}">${e.paid?'Pagato ✓':'Da pagare'}</span>${e.link?`<a href="${e.link}" target="_blank" style="display:inline-block;margin-top:10px;background:var(--rust);color:var(--cream);padding:6px 14px;border-radius:6px;font-size:12px;font-weight:600;text-decoration:none;">📄 Apri biglietto</a>`:""}</div></div>`).join('');
+  c.innerHTML=excursions.map(e=>{
+    const btn=e.link?'<a href="'+e.link+'" target="_blank" style="display:inline-block;margin-top:10px;background:var(--rust);color:var(--cream);padding:6px 14px;border-radius:6px;font-size:12px;font-weight:600;text-decoration:none;">Apri biglietto</a>':'';
+    return '<div class="exc-card" style="border-color:'+e.color+'40;"><div class="exc-top"><div><div class="exc-name">'+e.name+'</div><div class="exc-date">'+e.date+'</div></div><div class="exc-price">'+e.price+'</div></div><div class="exc-detail">'+e.note+'</div><div class="exc-footer"><span style="font-size:12px;color:rgba(245,237,214,0.5);">'+e.persons+' · '+e.duration+' · '+e.priceUnit+'</span><span class="tag '+(e.paid?'tag-paid':'tag-topay')+'">'+(e.paid?'Pagato ✓':'Da pagare')+'</span></div>'+btn+'</div>';
+  }).join('');
 }
 
 let checkData={};
@@ -562,12 +598,12 @@ function showSection(id,btn){
   document.getElementById(id).classList.add('active');
   btn.classList.add('active');
   if(id==='mappa'&&!mapInitialized&&typeof google!=='undefined'){mapInitialized=true;initMap();}
-  if(id==='hotel')renderHotels();if(id==='meteo'&&!weatherLoaded){weatherLoaded=true;loadWeather();}
+  if(id==='hotel')renderHotels();if(id==='hotel')renderHotels();if(id==='meteo'&&!weatherLoaded){weatherLoaded=true;loadWeather();}
   if(id==='valuta'&&!valutaLoaded){valutaLoaded=true;loadExchangeRate();}
   if(id==='orario'){updateClocks();if(!orarioInterval)orarioInterval=setInterval(updateClocks,1000);}
 }
 
-renderDays();renderExcursions();renderChecklist();renderCosti();renderGruppo();renderHotels();
+renderDays();renderExcursions();renderChecklist();renderCosti();renderGruppo();renderHotels();renderHotels();
 </script>
 
 <!-- Sostituisci AIzaSyB2dk6H08eCWsiKb7EdAo4zGQBidvN7how con la tua Google Maps API Key -->
