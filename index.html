@@ -6,7 +6,7 @@
 <title>USA Road Trip 2026 🇺🇸</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; } html { background: var(--rust); }
+* { margin: 0; padding: 0; box-sizing: border-box; }
 :root {
   --cream: #F5EDD6; --dark: #1A1208; --rust: #C4441C;
   --amber: #E8A020; --tan: #D4B483; --green: #2D5A27;
@@ -17,7 +17,7 @@ body {
   font-family: 'Montserrat', sans-serif; min-height: 100vh;
   background-image: radial-gradient(ellipse at top, #2A1A08 0%, #1A1208 60%);
 }
-.header { background: var(--rust); position: relative; overflow: hidden; border-bottom: 4px solid var(--amber); margin-top: -1px; }
+.header { background: var(--rust); position: relative; overflow: hidden; border-bottom: 4px solid var(--amber); padding-top: env(safe-area-inset-top); }
 .header-inner { max-width: 900px; margin: 0 auto; padding: 20px 24px 16px; position: relative; z-index: 2; }
 .header-badge { font-family: 'Bebas Neue', sans-serif; font-size: 11px; letter-spacing: 4px; color: var(--amber); margin-bottom: 4px; }
 .header-title { font-family: 'Bebas Neue', sans-serif; font-size: 48px; letter-spacing: 3px; color: var(--cream); line-height: 1; }
@@ -35,14 +35,32 @@ body {
 .section-title { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 3px; color: var(--cream); margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
 .section-title::after { content: ''; flex: 1; height: 2px; background: linear-gradient(90deg, rgba(196,68,28,0.5), transparent); }
 
-/* STEP CHECKBOXES */
-.step-row { display:flex; align-items:flex-start; gap:10px; padding:8px 0; border-bottom:1px solid rgba(245,237,214,0.06); }
-.step-row:last-child { border-bottom:none; }
-.step-check { width:20px; height:20px; border:2px solid rgba(196,68,28,0.5); border-radius:4px; flex-shrink:0; margin-top:1px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all 0.2s; }
-.step-check.checked { background:var(--green); border-color:var(--green); }
-.step-check.checked::after { content:"✓"; color:#90EE90; font-size:12px; font-weight:700; }
-.step-content { flex:1; font-size:13px; color:rgba(245,237,214,0.8); line-height:1.5; }
-.step-content.checked { text-decoration:line-through; color:rgba(245,237,214,0.3); }
+
+/* HOTEL */
+.hotel-card { background: rgba(245,237,214,0.04); border: 1px solid rgba(196,68,28,0.25); border-radius: 10px; margin-bottom: 14px; overflow: hidden; }
+.hotel-card-header { padding: 16px 18px; display: flex; align-items: center; gap: 14px; cursor: pointer; }
+.hotel-card-header:hover { background: rgba(245,237,214,0.03); }
+.hotel-night-badge { font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: var(--rust); min-width: 36px; line-height: 1; }
+.hotel-card-info { flex: 1; }
+.hotel-card-name { font-size: 15px; font-weight: 700; color: var(--cream); }
+.hotel-card-location { font-size: 12px; color: rgba(245,237,214,0.5); margin-top: 2px; }
+.hotel-card-dates { font-size: 11px; font-weight: 600; color: var(--amber); margin-top: 3px; text-transform: uppercase; letter-spacing: 0.5px; }
+.hotel-card-body { display: none; padding: 0 18px 18px; border-top: 1px solid rgba(196,68,28,0.15); }
+.hotel-card.open .hotel-card-body { display: block; }
+.hotel-card.open .hotel-card-chevron { transform: rotate(180deg); }
+.hotel-card-chevron { color: rgba(245,237,214,0.3); font-size: 18px; transition: transform 0.2s; }
+.hotel-info-row { display: flex; gap: 10px; align-items: flex-start; padding: 7px 0; border-bottom: 1px solid rgba(245,237,214,0.06); font-size: 13px; color: rgba(245,237,214,0.8); }
+.hotel-info-row:last-child { border-bottom: none; }
+.hotel-info-icon { min-width: 20px; font-size: 14px; }
+.hotel-booking-row { background: rgba(245,237,214,0.04); border: 1px solid rgba(245,237,214,0.08); border-radius: 8px; padding: 12px 14px; margin-top: 10px; }
+.hotel-booking-ref { font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: var(--amber); letter-spacing: 1px; }
+.hotel-booking-sub { font-size: 11px; color: rgba(245,237,214,0.5); margin-top: 2px; }
+.hotel-btn { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; background: var(--rust); color: var(--cream); border: none; border-radius: 6px; padding: 8px 14px; font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 600; cursor: pointer; text-decoration: none; }
+.hotel-btn:hover { background: #a33818; }
+.hotel-paid { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 3px; margin-left: 8px; }
+.hotel-paid.yes { background: #2D5A27; color: #90EE90; }
+.hotel-paid.no { background: #3A1A08; color: var(--amber); border: 1px solid var(--amber); }
+
 /* DAY CARDS */
 .day-card { background: rgba(245,237,214,0.04); border: 1px solid rgba(196,68,28,0.25); border-radius: 8px; margin-bottom: 12px; overflow: hidden; transition: border-color 0.2s; }
 .day-card:hover { border-color: rgba(196,68,28,0.5); }
@@ -125,7 +143,7 @@ body {
   <div class="header-inner">
     <div class="header-badge">★ SUMMER 2026 ★</div>
     <div class="header-title">USA ROAD TRIP</div>
-    <div class="header-sub">Los Angeles &nbsp;·&nbsp; California &nbsp;·&nbsp; Southwest</div><div class="header-sub" style="margin-top:2px;font-weight:600;">17–29 Agosto 2026</div>
+    <div class="header-sub">Los Angeles &nbsp;·&nbsp; California &nbsp;·&nbsp; Southwest</div><div class="header-sub" style="margin-top:4px;font-weight:600;color:rgba(245,237,214,0.9);">17–29 Agosto 2026</div>
   </div>
   <div class="road-line"></div>
 </div>
@@ -140,7 +158,7 @@ body {
     <button class="nav-btn" onclick="showSection('escursioni',this)">Escursioni</button>
     <button class="nav-btn" onclick="showSection('checklist',this)">Checklist</button>
     <button class="nav-btn" onclick="showSection('costi',this)">Costi</button>
-    <button class="nav-btn" onclick="showSection('gruppo',this)">Gruppo</button>
+    <button class="nav-btn" onclick="showSection('hotel',this)">Hotel</button><button class="nav-btn" onclick="showSection('gruppo',this)">Gruppo</button>
   </div>
 </nav>
 
@@ -214,7 +232,12 @@ body {
   <div id="escursioni" class="section"><div class="section-title">Escursioni</div><div id="exc-container"></div></div>
   <div id="checklist" class="section"><div class="section-title">Da fare</div><div class="progress-label" id="progress-label">0 / 0 completati</div><div class="progress-bar-wrap"><div class="progress-bar-fill" id="progress-fill" style="width:0%"></div></div><div id="checklist-container"></div></div>
   <div id="costi" class="section"><div class="section-title">Costi</div><div id="costi-container"></div></div>
-  <div id="gruppo" class="section"><div class="section-title">Il Gruppo</div><div id="gruppo-container"></div></div>
+  
+  <div id="hotel" class="section">
+    <div class="section-title">Hotel</div>
+    <div id="hotel-container"></div>
+  </div>
+<div id="gruppo" class="section"><div class="section-title">Il Gruppo</div><div id="gruppo-container"></div></div>
 </div>
 
 <script>
@@ -381,19 +404,9 @@ function drawRoute(pts) {
   });
 }
 
-function getStepKey(dayN, itemIdx){ return 'step_'+dayN+'_'+itemIdx; }
-function isChecked(key){ return localStorage.getItem(key)==='1'; }
-function toggleStep(key, dayN, itemIdx){
-  const checked = isChecked(key);
-  localStorage.setItem(key, checked?'0':'1');
-  renderDays();
-  // reopen the day
-  const card = document.getElementById('day-'+(dayN-1));
-  if(card) card.classList.add('open');
-}
 function renderDays(){
   const c=document.getElementById('days-container');
-  c.innerHTML=days.map((d,i)=>`<div class="day-card${d.special?' special':''}" id="day-${i}"><div class="day-header" onclick="toggleDay(${i})"><div class="day-num">${String(d.n).padStart(2,'0')}</div><div class="day-info"><div class="day-date">${d.date}</div><div class="day-title">${d.title}</div><div class="day-meta">${d.drive}${d.hotel!=='—'?' &nbsp;·&nbsp; 🏨 '+d.hotel.split(',')[0]:''}</div></div><div class="day-chevron">▾</div></div><div class="day-body">${d.items.map((it,idx)=>{const key=getStepKey(d.n,idx);const chk=isChecked(key);return `<div class="step-row"><div class="step-check ${chk?'checked':''}" onclick="toggleStep('${key}',${d.n},${idx})"></div><div class="step-content ${chk?'checked':''}">${it.icon} ${it.text}${it.paid===true?'<span class="tag tag-paid">Pagato ✓</span>':it.paid===false?'<span class="tag tag-topay">Da pagare</span>':it.special?'<span class="tag tag-special">🎸 Blink-182</span>':''}</div></div>`;}).join('')}${d.hotel!=='—'?`<div class="hotel-chip">🏨 ${d.hotel}</div>`:''}${d.warning?`<div class="warning-box"><span>⚠️</span><span>${d.warning}</span></div>`:''}${d.info?`<div class="info-box"><span>ℹ️</span><span>${d.info}</span></div>`:''}</div></div>`).join('');
+  c.innerHTML=days.map((d,i)=>`<div class="day-card${d.special?' special':''}" id="day-${i}"><div class="day-header" onclick="toggleDay(${i})"><div class="day-num">${String(d.n).padStart(2,'0')}</div><div class="day-info"><div class="day-date">${d.date}</div><div class="day-title">${d.title}</div><div class="day-meta">${d.drive}${d.hotel!=='—'?' &nbsp;·&nbsp; 🏨 '+d.hotel.split(',')[0]:''}</div></div><div class="day-chevron">▾</div></div><div class="day-body">${d.items.map(it=>`<div class="detail-row"><span class="detail-icon">${it.icon}</span><span>${it.text}${it.paid===true?'<span class="tag tag-paid">Pagato ✓</span>':it.paid===false?'<span class="tag tag-topay">Da pagare</span>':it.special?'<span class="tag tag-special">🎸 Blink-182</span>':''}</span></div>`).join('')}${d.hotel!=='—'?`<div class="hotel-chip">🏨 ${d.hotel}</div>`:''}${d.warning?`<div class="warning-box"><span>⚠️</span><span>${d.warning}</span></div>`:''}${d.info?`<div class="info-box"><span>ℹ️</span><span>${d.info}</span></div>`:''}</div></div>`).join('');
 }
 
 function toggleDay(i){document.getElementById('day-'+i).classList.toggle('open');}
@@ -532,12 +545,12 @@ function showSection(id,btn){
   document.getElementById(id).classList.add('active');
   btn.classList.add('active');
   if(id==='mappa'&&!mapInitialized&&typeof google!=='undefined'){mapInitialized=true;initMap();}
-  if(id==='meteo'&&!weatherLoaded){weatherLoaded=true;loadWeather();}
+  if(id==='hotel')renderHotels();if(id==='meteo'&&!weatherLoaded){weatherLoaded=true;loadWeather();}
   if(id==='valuta'&&!valutaLoaded){valutaLoaded=true;loadExchangeRate();}
   if(id==='orario'){updateClocks();if(!orarioInterval)orarioInterval=setInterval(updateClocks,1000);}
 }
 
-renderDays();renderExcursions();renderChecklist();renderCosti();renderGruppo();
+renderDays();renderExcursions();renderChecklist();renderCosti();renderGruppo();renderHotels();
 </script>
 
 <!-- Sostituisci AIzaSyB2dk6H08eCWsiKb7EdAo4zGQBidvN7how con la tua Google Maps API Key -->
