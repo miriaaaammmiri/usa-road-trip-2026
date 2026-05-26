@@ -258,12 +258,7 @@ const days=[
   {n:14,date:"Sabato 30 Agosto",title:"Londra → Milano Linate",drive:"Rientro",hotel:"—",special:false,items:[{icon:"🏠",text:"Arrivo a Londra alle 10:50"},{icon:"🍽️",text:"Pranzo in aeroporto"},{icon:"✈️",text:"Volo BA7305 da London City ore 15:45 → Milano Linate 18:40"}],warning:null,info:null},
 ];
 
-const excursions=[
-  {name:"Alcatraz Tour",date:"Lunedì 18 Agosto · ore 14:30",persons:"6 adulti",price:"€ 492",priceUnit:"82€ × 6",duration:"~3 ore",paid:false,note:"Traghetto da Pier 33 incluso. Biglietti ancora da pagare — verifica disponibilità.",color:"#4A90C4"},
-  {name:"The Sphere — Wizard of Oz",date:"Giovedì 21 Agosto · ore 14:00",persons:"6 biglietti (4 + 2 sep.)",price:"~€ 588",priceUnit:"98€ × 6",duration:"~1h30",paid:true,note:"Sezione 405, Fila 12, Posti 27–30. Order #29-39650/NEV. Due prenotazioni separate.",color:"#E8A020"},
-  {name:"Lower Antelope Canyon",date:"Sabato 23 Agosto · ore 09:00",persons:"6 adulti",price:"€ 516",priceUnit:"86€ × 6",duration:"~1 ora",paid:true,note:"Tour guidato Navajo — già prenotato e pagato ✓. Punto di incontro: Page, Arizona.",color:"#C4441C"},
-  {name:"Warner Bros. Studio Tour",date:"Martedì 26 Agosto · ore 14:30",persons:"4 adulti",price:"€ 260",priceUnit:"65€ × 4",duration:"~3 ore",paid:true,note:"Hollywood. Prenotato per 4 persone — verificare se Zia Lucia e Vittorio vogliono aggiungere biglietti.",color:"#2D5A27"},
-];
+
 
 const checklists={
   "Prima della partenza":[
@@ -421,6 +416,12 @@ function renderHotels(){
   c.innerHTML=hotels.map((h,i)=>'<div class="hotel-card" id="hotel-card-'+i+'"><div class="hotel-card-header" onclick="toggleHotel('+i+')"><div class="hotel-night-badge">'+String(h.day).padStart(2,'0')+'</div><div class="hotel-card-info"><div class="hotel-card-name">'+h.name+'</div><div class="hotel-card-location">'+h.location+'</div><div class="hotel-card-dates">'+h.checkin+' - '+h.checkout+'</div></div><div class="hotel-card-chevron">v</div></div><div class="hotel-card-body"><div class="hotel-info-row"><span>Tel: '+h.phone+'</span></div><div class="hotel-info-row"><span>'+h.address+'</span></div><div class="hotel-info-row"><span>'+h.notes+'</span></div>'+h.bookings.map(function(b){return '<div class="hotel-booking-row"><div class="hotel-booking-ref">Conf. '+b.ref+'</div><div class="hotel-booking-sub">PIN: '+b.pin+' - '+b.guests+(b.price?' - Euro '+b.price:'')+'</div><span class="hotel-paid '+(b.paid?'yes':'no')+'">'+(b.paid?'Pagato':'Da pagare')+'</span><br><a href="'+b.link+'" target="_blank" class="hotel-btn">Apri conferma</a></div>';}).join('')+'</div></div>').join('');
 }
 
+const excursions=[
+  {name:"Alcatraz Tour",date:"Lunedi 18 Agosto · ore 14:30",persons:"6 adulti",price:"492",priceUnit:"82 x 6",duration:"~3 ore",paid:false,note:"Traghetto da Pier 33 incluso. Biglietti ancora da pagare.",color:"#4A90C4",link:null},
+  {name:"The Sphere — Wizard of Oz",date:"Giovedi 21 Agosto · ore 14:00",persons:"6 biglietti (4 + 2 sep.)",price:"588",priceUnit:"98 x 6",duration:"~1h30",paid:true,note:"Sezione 405, Fila 12, Posti 27-30. Order #29-39650/NEV. Due prenotazioni separate.",color:"#E8A020",link:"https://www.ticketmaster.com/user/orders"},
+  {name:"Lower Antelope Canyon",date:"Sabato 23 Agosto · ore 09:00",persons:"6 adulti",price:"516",priceUnit:"86 x 6",duration:"~1 ora",paid:true,note:"Tour guidato Navajo. Punto di incontro: Page, Arizona.",color:"#C4441C",link:"https://drive.google.com/file/d/1EUZjZEtfZkR7pfEZeyOB-L8byiJw5F-W/view?usp=drive_link"},
+  {name:"Warner Bros. Studio Tour",date:"Martedi 26 Agosto · ore 14:30",persons:"4 adulti",price:"260",priceUnit:"65 x 4",duration:"~3 ore",paid:true,note:"Hollywood. 4 biglietti su 6 — verificare Zia Lucia e Vittorio.",color:"#2D5A27",link:"https://drive.google.com/file/d/1N4QQ9dpg4sy65rhJ5Cu6oevJ73tc83q5/view?usp=drive_link"},
+];
 function renderDays(){
   const c=document.getElementById('days-container');
   c.innerHTML=days.map((d,i)=>`<div class="day-card${d.special?' special':''}" id="day-${i}"><div class="day-header" onclick="toggleDay(${i})"><div class="day-num">${String(d.n).padStart(2,'0')}</div><div class="day-info"><div class="day-date">${d.date}</div><div class="day-title">${d.title}</div><div class="day-meta">${d.drive}${d.hotel!=='—'?' &nbsp;·&nbsp; 🏨 '+d.hotel.split(',')[0]:''}</div></div><div class="day-chevron">▾</div></div><div class="day-body">${d.items.map(it=>`<div class="detail-row"><span class="detail-icon">${it.icon}</span><span>${it.text}${it.paid===true?'<span class="tag tag-paid">Pagato ✓</span>':it.paid===false?'<span class="tag tag-topay">Da pagare</span>':it.special?'<span class="tag tag-special">🎸 Blink-182</span>':''}</span></div>`).join('')}${d.hotel!=='—'?`<div class="hotel-chip">🏨 ${d.hotel}</div>`:''}${d.warning?`<div class="warning-box"><span>⚠️</span><span>${d.warning}</span></div>`:''}${d.info?`<div class="info-box"><span>ℹ️</span><span>${d.info}</span></div>`:''}</div></div>`).join('');
@@ -430,7 +431,7 @@ function toggleDay(i){document.getElementById('day-'+i).classList.toggle('open')
 
 function renderExcursions(){
   const c=document.getElementById('exc-container');
-  c.innerHTML=excursions.map(e=>`<div class="exc-card" style="border-color:${e.color}40;"><div class="exc-top"><div><div class="exc-name">${e.name}</div><div class="exc-date">${e.date}</div></div><div class="exc-price">${e.price}</div></div><div class="exc-detail">${e.note}</div><div class="exc-footer"><span style="font-size:12px;color:rgba(245,237,214,0.5);">👥 ${e.persons} &nbsp;·&nbsp; ⏱ ${e.duration} &nbsp;·&nbsp; ${e.priceUnit}</span><span class="tag ${e.paid?'tag-paid':'tag-topay'}">${e.paid?'Pagato ✓':'Da pagare'}</span></div></div>`).join('');
+  c.innerHTML=excursions.map(e=>`<div class="exc-card" style="border-color:${e.color}40;"><div class="exc-top"><div><div class="exc-name">${e.name}</div><div class="exc-date">${e.date}</div></div><div class="exc-price">€ ${e.price}</div></div><div class="exc-detail">${e.note}</div><div class="exc-footer"><span style="font-size:12px;color:rgba(245,237,214,0.5);">👥 ${e.persons} &nbsp;·&nbsp; ⏱ ${e.duration} &nbsp;·&nbsp; ${e.priceUnit}</span><span class="tag ${e.paid?'tag-paid':'tag-topay'}">${e.paid?'Pagato ✓':'Da pagare'}</span></div>${e.link?'<a href="'+e.link+'" target="_blank" class="hotel-btn" style="margin:10px 0 4px;">📄 Apri biglietto</a>":'<span style="font-size:11px;color:rgba(245,237,214,0.3);display:block;margin-top:8px;">Biglietto non ancora disponibile</span>'}</div>`).join('');
 }
 
 let checkData={};
